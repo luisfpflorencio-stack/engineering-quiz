@@ -6,318 +6,128 @@
 <title>MFE23 IceBreaker</title>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
-
   :root {
-    --bg: #f5f7fa;
-    --surface: #ffffff;
-    --accent: #2563eb;
-    --accent-light: #eff6ff;
-    --accent-dark: #1d4ed8;
-    --text: #1e293b;
-    --text-muted: #64748b;
-    --border: #e2e8f0;
-    --green: #16a34a;
-    --green-light: #f0fdf4;
-    --red: #dc2626;
-    --red-light: #fef2f2;
-    --gold: #d97706;
-    --gold-light: #fffbeb;
-    --radius: 16px;
-    --shadow: 0 2px 12px rgba(0,0,0,0.08);
+    --bg:#f5f7fa; --surface:#fff; --accent:#2563eb; --accent-light:#eff6ff;
+    --accent-dark:#1d4ed8; --text:#1e293b; --text-muted:#64748b;
+    --border:#e2e8f0; --green:#16a34a; --green-light:#f0fdf4;
+    --red:#dc2626; --red-light:#fef2f2; --gold:#d97706; --gold-light:#fffbeb;
+    --shadow:0 2px 12px rgba(0,0,0,0.08);
   }
+  *{ box-sizing:border-box; margin:0; padding:0; }
+  body{ font-family:'Inter',sans-serif; background:var(--bg); color:var(--text); min-height:100vh; display:flex; align-items:flex-start; justify-content:center; padding:16px; }
+  .screen{ display:none; width:100%; max-width:480px; }
+  .screen.active{ display:block; animation:up .3s ease; }
+  @keyframes up{ from{opacity:0;transform:translateY(12px)} to{opacity:1;transform:translateY(0)} }
 
-  * { box-sizing: border-box; margin: 0; padding: 0; }
+  .card{ background:var(--surface); border-radius:16px; box-shadow:var(--shadow); padding:28px 24px; margin-bottom:16px; }
 
-  body {
-    font-family: 'Inter', sans-serif;
-    background: var(--bg);
-    color: var(--text);
-    min-height: 100vh;
-    display: flex;
-    align-items: flex-start;
-    justify-content: center;
-    padding: 16px;
-  }
+  .badge{ display:inline-block; background:var(--accent-light); color:var(--accent); font-size:11px; font-weight:700; letter-spacing:.1em; text-transform:uppercase; padding:4px 12px; border-radius:100px; margin-bottom:16px; }
 
-  .screen { display: none; width: 100%; max-width: 480px; }
-  .screen.active { display: block; animation: up 0.3s ease; }
+  label.field-label{ display:block; font-size:13px; font-weight:600; color:var(--text); margin-bottom:8px; }
+  input[type="text"]{ width:100%; padding:14px 16px; border:1.5px solid var(--border); border-radius:12px; font-size:16px; font-family:'Inter',sans-serif; color:var(--text); background:var(--bg); outline:none; transition:border-color .2s; margin-bottom:12px; }
+  input[type="text"]:focus{ border-color:var(--accent); background:#fff; }
+  input[type="text"]::placeholder{ color:#b0bec5; }
+  input.code-input{ text-transform:uppercase; letter-spacing:.2em; font-size:22px; font-weight:800; text-align:center; }
 
-  @keyframes up {
-    from { opacity: 0; transform: translateY(12px); }
-    to   { opacity: 1; transform: translateY(0); }
-  }
+  .btn{ display:block; width:100%; padding:16px; border:none; border-radius:12px; font-size:16px; font-weight:700; cursor:pointer; transition:all .15s; font-family:'Inter',sans-serif; }
+  .btn-primary{ background:var(--accent); color:#fff; }
+  .btn-primary:hover{ background:var(--accent-dark); }
+  .btn-primary:active{ transform:scale(.98); }
+  .btn-primary:disabled{ background:var(--border); color:var(--text-muted); cursor:not-allowed; }
 
-  .card {
-    background: var(--surface);
-    border-radius: var(--radius);
-    box-shadow: var(--shadow);
-    padding: 28px 24px;
-    margin-bottom: 16px;
-  }
+  .error-msg{ background:var(--red-light); color:var(--red); border-radius:10px; padding:12px 16px; font-size:14px; font-weight:600; margin-bottom:12px; display:none; }
+  .error-msg.show{ display:block; }
 
-  /* ── LANDING ── */
-  #screen-landing { padding-top: 24px; }
-
-  .badge {
-    display: inline-block;
-    background: var(--accent-light);
-    color: var(--accent);
-    font-size: 11px;
-    font-weight: 700;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    padding: 4px 12px;
-    border-radius: 100px;
-    margin-bottom: 20px;
-  }
-
-  .landing-title {
-    font-size: 30px;
-    font-weight: 800;
-    line-height: 1.15;
-    color: var(--text);
-    margin-bottom: 8px;
-  }
-  .landing-title span { color: var(--accent); }
-
-  .landing-sub {
-    color: var(--text-muted);
-    font-size: 14px;
-    line-height: 1.6;
-    margin-bottom: 28px;
-  }
-
-  .stats-row { display: flex; gap: 12px; margin-bottom: 28px; }
-
-  .stat-chip {
-    flex: 1;
-    background: var(--bg);
-    border-radius: 12px;
-    padding: 14px 10px;
-    text-align: center;
-  }
-  .stat-num { font-size: 22px; font-weight: 800; color: var(--accent); }
-  .stat-label { font-size: 11px; color: var(--text-muted); margin-top: 2px; font-weight: 500; }
-
-  label.field-label {
-    display: block;
-    font-size: 13px;
-    font-weight: 600;
-    color: var(--text);
-    margin-bottom: 8px;
-  }
-
-  input[type="text"] {
-    width: 100%;
-    padding: 14px 16px;
-    border: 1.5px solid var(--border);
-    border-radius: 12px;
-    font-size: 16px;
-    font-family: 'Inter', sans-serif;
-    color: var(--text);
-    background: var(--bg);
-    outline: none;
-    transition: border-color 0.2s;
-    margin-bottom: 16px;
-  }
-  input[type="text"]:focus { border-color: var(--accent); background: #fff; }
-  input[type="text"]::placeholder { color: #b0bec5; }
-
-  .btn {
-    display: block;
-    width: 100%;
-    padding: 16px;
-    border: none;
-    border-radius: 12px;
-    font-size: 16px;
-    font-weight: 700;
-    cursor: pointer;
-    transition: all 0.15s;
-    font-family: 'Inter', sans-serif;
-  }
-  .btn-primary { background: var(--accent); color: #fff; }
-  .btn-primary:hover { background: var(--accent-dark); }
-  .btn-primary:active { transform: scale(0.98); }
-  .btn-primary:disabled { background: var(--border); color: var(--text-muted); cursor: not-allowed; }
-  .btn-outline { background: transparent; border: 1.5px solid var(--border); color: var(--text); margin-top: 4px; }
-  .btn-outline:hover { border-color: var(--accent); color: var(--accent); }
-
-  /* ── QUIZ HEADER ── */
-  #screen-quiz { padding-top: 16px; }
-
-  .quiz-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 16px;
-  }
-  .q-counter { font-size: 12px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.08em; }
-  .username-pill { font-size: 12px; font-weight: 600; color: var(--accent); background: var(--accent-light); padding: 4px 12px; border-radius: 100px; }
+  /* Waiting */
+  .waiting-card{ text-align:center; padding:40px 24px; }
+  .pulse{ font-size:48px; animation:pulse 2s infinite; display:block; margin-bottom:16px; }
+  @keyframes pulse{ 0%,100%{transform:scale(1)} 50%{transform:scale(1.1)} }
+  .waiting-title{ font-size:20px; font-weight:700; margin-bottom:8px; }
+  .waiting-sub{ font-size:14px; color:var(--text-muted); line-height:1.5; }
+  .username-display{ font-weight:800; color:var(--accent); }
 
   /* Timer */
-  .timer-wrap { margin-bottom: 20px; }
-  .timer-bar-bg { width: 100%; height: 6px; background: var(--border); border-radius: 100px; overflow: hidden; margin-bottom: 8px; }
-  .timer-bar { height: 100%; border-radius: 100px; background: var(--accent); transition: width 1s linear, background 0.5s; }
-  .timer-bar.warning { background: var(--gold); }
-  .timer-bar.danger  { background: var(--red); }
-  .timer-label { text-align: right; font-size: 13px; font-weight: 700; color: var(--text-muted); font-variant-numeric: tabular-nums; }
-  .timer-label.warning { color: var(--gold); }
-  .timer-label.danger  { color: var(--red); }
+  .timer-wrap{ margin-bottom:20px; }
+  .timer-bar-bg{ width:100%; height:6px; background:var(--border); border-radius:100px; overflow:hidden; margin-bottom:8px; }
+  .timer-bar{ height:100%; border-radius:100px; background:var(--accent); transition:width 1s linear, background .5s; }
+  .timer-bar.warning{ background:var(--gold); }
+  .timer-bar.danger{ background:var(--red); }
+  .timer-label{ text-align:right; font-size:13px; font-weight:700; color:var(--text-muted); font-variant-numeric:tabular-nums; }
+  .timer-label.warning{ color:var(--gold); }
+  .timer-label.danger{ color:var(--red); }
 
-  /* Question */
-  .q-tag { font-size: 11px; font-weight: 700; color: var(--accent); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 12px; }
-  .q-text { font-size: 18px; font-weight: 700; line-height: 1.4; color: var(--text); margin-bottom: 8px; }
-  .q-hint {
-    font-size: 22px;
-    font-weight: 800;
-    color: var(--accent);
-    letter-spacing: 0.15em;
-    margin-bottom: 24px;
-    padding: 16px;
-    background: var(--accent-light);
-    border-radius: 10px;
-    text-align: center;
-    display: none;
-  }
-  .q-context {
-    font-size: 13px;
-    color: var(--text-muted);
-    line-height: 1.5;
-    margin-bottom: 20px;
-    padding: 12px 14px;
-    background: var(--bg);
-    border-radius: 10px;
-    border-left: 3px solid var(--accent);
-    display: none;
-  }
+  /* Quiz */
+  .quiz-header{ display:flex; align-items:center; justify-content:space-between; margin-bottom:16px; }
+  .q-counter{ font-size:12px; font-weight:700; color:var(--text-muted); text-transform:uppercase; letter-spacing:.08em; }
+  .username-pill{ font-size:12px; font-weight:600; color:var(--accent); background:var(--accent-light); padding:4px 12px; border-radius:100px; }
 
-  /* Options */
-  .options { display: flex; flex-direction: column; gap: 10px; }
+  .q-tag{ font-size:11px; font-weight:700; color:var(--accent); text-transform:uppercase; letter-spacing:.1em; margin-bottom:12px; }
+  .q-text{ font-size:18px; font-weight:700; line-height:1.4; color:var(--text); margin-bottom:8px; }
+  .q-hint{ font-size:22px; font-weight:800; color:var(--accent); letter-spacing:.15em; margin-bottom:20px; padding:16px; background:var(--accent-light); border-radius:10px; text-align:center; display:none; }
+  .q-context{ font-size:13px; color:var(--text-muted); line-height:1.5; margin-bottom:20px; padding:12px 14px; background:var(--bg); border-radius:10px; border-left:3px solid var(--accent); display:none; }
 
-  .option-btn {
-    display: flex;
-    align-items: center;
-    gap: 14px;
-    padding: 16px;
-    background: var(--bg);
-    border: 1.5px solid var(--border);
-    border-radius: 12px;
-    cursor: pointer;
-    text-align: left;
-    font-family: 'Inter', sans-serif;
-    font-size: 15px;
-    font-weight: 500;
-    color: var(--text);
-    transition: all 0.15s;
-    width: 100%;
-    line-height: 1.4;
-  }
-  .option-btn:hover:not(:disabled) { border-color: var(--accent); background: var(--accent-light); color: var(--accent-dark); }
+  .options{ display:flex; flex-direction:column; gap:10px; }
+  .option-btn{ display:flex; align-items:center; gap:14px; padding:16px; background:var(--bg); border:1.5px solid var(--border); border-radius:12px; cursor:pointer; text-align:left; font-family:'Inter',sans-serif; font-size:15px; font-weight:500; color:var(--text); transition:all .15s; width:100%; line-height:1.4; }
+  .option-btn:hover:not(:disabled){ border-color:var(--accent); background:var(--accent-light); color:var(--accent-dark); }
+  .option-btn .letter{ width:32px; height:32px; border-radius:8px; background:var(--surface); border:1.5px solid var(--border); display:flex; align-items:center; justify-content:center; font-size:13px; font-weight:700; flex-shrink:0; color:var(--text-muted); transition:all .15s; }
+  .option-btn:hover:not(:disabled) .letter{ background:var(--accent); border-color:var(--accent); color:#fff; }
+  .option-btn.correct{ border-color:var(--green); background:var(--green-light); color:var(--green); }
+  .option-btn.correct .letter{ background:var(--green); border-color:var(--green); color:#fff; }
+  .option-btn.wrong{ border-color:var(--red); background:var(--red-light); color:var(--red); }
+  .option-btn.wrong .letter{ background:var(--red); border-color:var(--red); color:#fff; }
+  .option-btn.reveal{ border-color:var(--green); background:var(--green-light); color:var(--green); opacity:.75; }
+  .option-btn.reveal .letter{ background:var(--green); border-color:var(--green); color:#fff; }
+  .option-btn:disabled{ cursor:not-allowed; }
 
-  .option-btn .letter {
-    width: 32px;
-    height: 32px;
-    border-radius: 8px;
-    background: var(--surface);
-    border: 1.5px solid var(--border);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 13px;
-    font-weight: 700;
-    flex-shrink: 0;
-    color: var(--text-muted);
-    transition: all 0.15s;
-  }
-  .option-btn:hover:not(:disabled) .letter { background: var(--accent); border-color: var(--accent); color: #fff; }
+  .feedback-box{ display:none; margin-top:16px; padding:14px 16px; border-radius:12px; font-size:14px; line-height:1.5; }
+  .feedback-box.show{ display:block; animation:up .3s ease; }
+  .feedback-box.timeout{ background:var(--red-light); border-left:3px solid var(--red); color:var(--red); font-weight:600; }
+  .feedback-box.explanation{ background:var(--accent-light); border-left:3px solid var(--accent); color:var(--text); }
+  .feedback-title{ font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:.1em; margin-bottom:6px; color:var(--accent); }
 
-  .option-btn.correct { border-color: var(--green); background: var(--green-light); color: var(--green); }
-  .option-btn.correct .letter { background: var(--green); border-color: var(--green); color: #fff; }
-  .option-btn.wrong   { border-color: var(--red);   background: var(--red-light);   color: var(--red); }
-  .option-btn.wrong   .letter { background: var(--red);   border-color: var(--red);   color: #fff; }
-  .option-btn.reveal  { border-color: var(--green); background: var(--green-light); color: var(--green); opacity: 0.75; }
-  .option-btn.reveal  .letter { background: var(--green); border-color: var(--green); color: #fff; }
-  .option-btn:disabled { cursor: not-allowed; }
+  /* Waiting for next */
+  .next-wait{ display:none; margin-top:16px; padding:14px 16px; background:var(--gold-light); border-radius:12px; border-left:3px solid var(--gold); font-size:14px; color:var(--gold); font-weight:600; }
+  .next-wait.show{ display:block; }
 
-  /* Feedback */
-  .feedback-box {
-    display: none;
-    margin-top: 16px;
-    padding: 14px 16px;
-    border-radius: 12px;
-    font-size: 14px;
-    line-height: 1.5;
-  }
-  .feedback-box.show { display: block; animation: up 0.3s ease; }
-  .feedback-box.timeout { background: var(--red-light); border-left: 3px solid var(--red); color: var(--red); font-weight: 600; }
-  .feedback-box.explanation { background: var(--accent-light); border-left: 3px solid var(--accent); color: var(--text); }
-  .feedback-title { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 6px; color: var(--accent); }
-
-  .btn-next { display: none; margin-top: 16px; }
-  .btn-next.show { display: block; }
-
-  /* ── RESULTS ── */
-  #screen-results { padding-top: 24px; }
-
-  .result-hero { text-align: center; padding: 32px 24px; }
-  .result-emoji { font-size: 56px; margin-bottom: 16px; }
-  .result-name  { font-size: 20px; font-weight: 800; margin-bottom: 6px; }
-  .result-score { font-size: 52px; font-weight: 800; color: var(--accent); line-height: 1; }
-  .result-label { font-size: 14px; color: var(--text-muted); margin-top: 4px; margin-bottom: 24px; }
-
-  .result-breakdown { display: flex; flex-direction: column; gap: 8px; }
-  .breakdown-row { display: flex; align-items: center; justify-content: space-between; padding: 10px 14px; background: var(--bg); border-radius: 10px; font-size: 13px; }
-  .breakdown-q { color: var(--text-muted); flex: 1; margin-right: 8px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  .breakdown-badge { font-size: 11px; font-weight: 700; padding: 3px 10px; border-radius: 100px; flex-shrink: 0; }
-  .badge-correct { background: var(--green-light); color: var(--green); }
-  .badge-wrong   { background: var(--red-light);   color: var(--red); }
-  .badge-timeout { background: var(--gold-light);  color: var(--gold); }
-
-  /* ── LEADERBOARD ── */
-  #screen-leaderboard { padding-top: 16px; }
-
-  .lb-title { font-size: 22px; font-weight: 800; margin-bottom: 4px; }
-  .lb-sub   { font-size: 13px; color: var(--text-muted); margin-bottom: 20px; }
-  .lb-list  { display: flex; flex-direction: column; gap: 10px; }
-
-  .lb-row {
-    display: flex;
-    align-items: center;
-    gap: 14px;
-    padding: 14px 16px;
-    background: var(--surface);
-    border-radius: 12px;
-    box-shadow: var(--shadow);
-  }
-  .lb-row.me { border: 2px solid var(--accent); background: var(--accent-light); }
-
-  .lb-rank { font-size: 16px; font-weight: 800; width: 28px; text-align: center; flex-shrink: 0; color: var(--text-muted); }
-  .lb-row:nth-child(1) .lb-rank { color: #f59e0b; font-size: 20px; }
-  .lb-row:nth-child(2) .lb-rank { color: #94a3b8; font-size: 18px; }
-  .lb-row:nth-child(3) .lb-rank { color: #b45309; font-size: 18px; }
-
-  .lb-name  { flex: 1; font-weight: 600; font-size: 15px; }
-  .lb-score { font-weight: 800; font-size: 16px; color: var(--accent); }
-  .lb-detail { font-size: 11px; color: var(--text-muted); font-weight: 500; }
-  .lb-loading { text-align: center; padding: 32px; color: var(--text-muted); font-size: 14px; }
+  /* Results */
+  #screen-results{ padding-top:24px; }
+  .result-hero{ text-align:center; padding:32px 24px; }
+  .result-emoji{ font-size:56px; margin-bottom:16px; }
+  .result-name{ font-size:20px; font-weight:800; margin-bottom:6px; }
+  .result-score{ font-size:52px; font-weight:800; color:var(--accent); line-height:1; }
+  .result-label{ font-size:14px; color:var(--text-muted); margin-top:4px; margin-bottom:24px; }
+  .result-breakdown{ display:flex; flex-direction:column; gap:8px; }
+  .breakdown-row{ display:flex; align-items:center; justify-content:space-between; padding:10px 14px; background:var(--bg); border-radius:10px; font-size:13px; }
+  .breakdown-q{ color:var(--text-muted); flex:1; margin-right:8px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .breakdown-badge{ font-size:11px; font-weight:700; padding:3px 10px; border-radius:100px; flex-shrink:0; }
+  .badge-correct{ background:var(--green-light); color:var(--green); }
+  .badge-wrong{ background:var(--red-light); color:var(--red); }
+  .badge-timeout{ background:var(--gold-light); color:var(--gold); }
 </style>
 </head>
 <body>
 
 <!-- LANDING -->
 <div id="screen-landing" class="screen active">
-  <div class="card">
+  <div class="card" style="margin-top:24px">
     <div class="badge">⚙️ MFE23 IceBreaker</div>
-    <h1 class="landing-title">Quantos<br><span>engenheiros</span><br>passam nisto?</h1>
-    <p class="landing-sub">8 perguntas de lógica, raciocínio e engenharia. Sem pesquisar. Sem ajuda. A sério.</p>
-    <div class="stats-row">
-      <div class="stat-chip"><div class="stat-num">8</div><div class="stat-label">Perguntas</div></div>
-      <div class="stat-chip"><div class="stat-num">~10</div><div class="stat-label">Minutos</div></div>
-      <div class="stat-chip"><div class="stat-num">0</div><div class="stat-label">Ajudas</div></div>
-    </div>
-    <label class="field-label" for="username-input">O teu nome</label>
+    <h1 style="font-size:28px;font-weight:800;margin-bottom:8px">Bem-vindo!</h1>
+    <p style="color:var(--text-muted);font-size:14px;line-height:1.6;margin-bottom:24px">Introduz o teu nome e o código da sessão para entrar no quiz.</p>
+    <div class="error-msg" id="join-error">Sessão não encontrada. Verifica o código.</div>
+    <label class="field-label">O teu nome</label>
     <input type="text" id="username-input" placeholder="ex: João Silva" maxlength="30" autocomplete="off" />
-    <button class="btn btn-primary" id="btn-start" disabled onclick="startQuiz()">Começar o Quiz →</button>
+    <label class="field-label">Código da Sessão</label>
+    <input type="text" id="code-input" placeholder="XXXXX" maxlength="5" autocomplete="off" class="code-input" />
+    <button class="btn btn-primary" id="btn-join" disabled onclick="joinSession()">Entrar →</button>
+  </div>
+</div>
+
+<!-- WAITING -->
+<div id="screen-waiting" class="screen">
+  <div class="card waiting-card">
+    <span class="pulse">⏳</span>
+    <div class="waiting-title">Aguarda o início!</div>
+    <p class="waiting-sub">Olá, <span class="username-display" id="waiting-name"></span>!<br>O admin vai iniciar o quiz em breve.</p>
   </div>
 </div>
 
@@ -342,7 +152,7 @@
       <div class="feedback-title">💡 Explicação</div>
       <div id="explanation-text"></div>
     </div>
-    <button class="btn btn-primary btn-next" id="btn-next" onclick="nextQuestion()">Próxima →</button>
+    <div class="next-wait" id="next-wait">⏳ Aguarda o admin para a próxima pergunta...</div>
   </div>
 </div>
 
@@ -358,204 +168,144 @@
     <div style="font-size:13px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:14px">Resumo</div>
     <div class="result-breakdown" id="result-breakdown"></div>
   </div>
-  <button class="btn btn-primary" onclick="showLeaderboard()" style="margin-bottom:8px">Ver Leaderboard 🏆</button>
-</div>
-
-<!-- LEADERBOARD -->
-<div id="screen-leaderboard" class="screen">
-  <div class="card">
-    <div class="lb-title">🏆 Leaderboard</div>
-    <div class="lb-sub">Ranking da sessão</div>
-    <div class="lb-list" id="lb-list"><div class="lb-loading">A carregar...</div></div>
-  </div>
-  <button class="btn btn-outline" onclick="showScreen('screen-landing')">Recomeçar</button>
 </div>
 
 <script>
-// ═══════════════════════
-// CONFIG — preenche depois de criar o projeto no Supabase
-// ═══════════════════════
 const SUPABASE_URL = 'https://ijwgivgtpbonferzayju.supabase.co';
 const SUPABASE_KEY = 'sb_publishable_6dFS89RL1DywcIH9_9BUPA_GhhgmKKl';
 
-// ═══════════════════════
-// PERGUNTAS
-// ═══════════════════════
 const QUESTIONS = [
-  {
-    tag: '🔤 Código',
-    text: 'Qual é a palavra escondida nesta sequência de números?',
-    hint: '3  ·  1  ·  6  ·  5',
-    context: null,
-    options: ['a) café', 'b) casa', 'c) copo'],
-    correct: 0,
-    time: 45,
-    explanation: 'Cada número é a posição da letra no alfabeto: 3=C, 1=A, 6=F, 5=E → CAFE → café ☕'
-  },
-  {
-    tag: '🔢 Sequências',
-    text: 'Qual é o número que falta?',
-    hint: '1  ·  2  ·  6  ·  24  ·  120  ·  ___',
-    context: null,
-    options: ['a) 360', 'b) 720', 'c) 600'],
-    correct: 1,
-    time: 60,
-    explanation: 'É a sequência de fatoriais: 1! = 1, 2! = 2, 3! = 6, 4! = 24, 5! = 120, 6! = 720.'
-  },
-  {
-    tag: '⚙️ Engenharia',
-    text: 'Uma bomba enche um tanque em 6h. Outra esvazia-o em 4h. Se ambas estiverem ligadas ao mesmo tempo, o que acontece?',
-    hint: null,
-    context: 'Assume que o tanque começa cheio.',
-    options: ['a) Enche em 12h', 'b) Esvazia em 12h', 'c) Equilibram-se — nada acontece'],
-    correct: 1,
-    time: 60,
-    explanation: 'Taxa de enchimento: 1/6 /h. Taxa de esvaziamento: 1/4 /h. Como 1/4 > 1/6, o tanque esvazia. Taxa líquida: 1/4 − 1/6 = 1/12 /h → esvazia em 12h.'
-  },
-  {
-    tag: '🧊 Espacial',
-    text: 'Quantas faces tem um cubo se lhe cortares exactamente um vértice (um canto)?',
-    hint: null,
-    context: null,
-    options: ['a) 6 faces', 'b) 7 faces', 'c) 8 faces'],
-    correct: 1,
-    time: 60,
-    explanation: 'O cubo tem 6 faces. O corte de um vértice cria uma nova face triangular sem remover nenhuma das existentes. Total: 7 faces.'
-  },
-  {
-    tag: '⚡ Física',
-    text: 'Uma ponte aguenta 10 toneladas. Um camião de 9,9t para em cima dela e um pássaro pousa no capô. A ponte colapsa. Porquê?',
-    hint: null,
-    context: null,
-    options: ['a) O pássaro foi a gota de água', 'b) O travão gerou força dinâmica > 10t', 'c) A ponte já estava danificada'],
-    correct: 1,
-    time: 60,
-    explanation: 'Ao travar, o camião aplicou força dinâmica (F = m × a) muito superior à carga estática de 9,9t. Erro clássico: confundir carga estática com dinâmica.'
-  },
-  {
-    tag: '🧠 Lógica',
-    text: 'Tens dois fios irregulares — cada um demora exactamente 1 hora a queimar. Sem relógio, como medes exactamente 45 minutos?',
-    hint: null,
-    context: 'Os fios não queimam de forma uniforme, não podes medir pelo comprimento.',
-    options: [
-      'a) Queimas metade de cada fio',
-      'b) Acendes o fio 1 dos dois extremos + fio 2 de uma ponta. Quando o fio 1 acabar, acendes o outro extremo do fio 2',
-      'c) É impossível sem relógio'
-    ],
-    correct: 1,
-    time: 60,
-    explanation: 'Fio 1 aceso dos dois extremos → acaba em 30 min. Nesse momento o fio 2 tem 30 min restantes. Acender o outro extremo do fio 2 → acaba em mais 15 min. 30 + 15 = 45 minutos ✅'
-  },
-  {
-    tag: '⚖️ Combinatória',
-    text: 'Tens 12 bolas visualmente idênticas. Uma é diferente — pode ser mais pesada OU mais leve. Com uma balança de pratos (sem pesos), qual o mínimo de pesagens para identificar a bola E saber se é mais pesada ou mais leve?',
-    hint: null,
-    context: null,
-    options: ['a) 2 pesagens', 'b) 3 pesagens', 'c) 4 pesagens'],
-    correct: 1,
-    time: 60,
-    explanation: '3 pesagens são suficientes. 1ª: 4 vs 4. Se equilibrar → a diferente está nas 4 restantes. Se não → sabes quais 4 suspeitas e qual lado pesa mais. As 2 pesagens seguintes eliminam sistematicamente até isolar a bola e determinar se é mais pesada ou leve.'
-  },
-  {
-    tag: '🦠 Contraintuitivo',
-    text: 'Uma bactéria duplica a cada minuto. Às 12:00 há 1 bactéria. Às 13:00 o frasco está completamente cheio. A que horas estava o frasco exactamente a metade?',
-    hint: null,
-    context: null,
-    options: ['a) 12:30', 'b) 12:59', 'c) 12:50'],
-    correct: 1,
-    time: 180,
-    explanation: 'Se às 13:00 está cheio e duplica a cada minuto, um minuto antes (12:59) estava a metade. Crescimento exponencial — a intuição linear diz "metade do tempo = metade da quantidade", mas está errada.'
-  }
+  { tag:'🔤 Código',        text:'Qual é a palavra escondida nesta sequência de números?', hint:'3  ·  1  ·  6  ·  5', context:null, options:['a) café','b) casa','c) copo'], correct:0, time:45, explanation:'Cada número é a posição da letra no alfabeto: 3=C, 1=A, 6=F, 5=E → CAFE → café ☕' },
+  { tag:'🔢 Sequências',    text:'Qual é o número que falta?', hint:'1  ·  2  ·  6  ·  24  ·  120  ·  ___', context:null, options:['a) 360','b) 720','c) 600'], correct:1, time:60, explanation:'É a sequência de fatoriais: 1!=1, 2!=2, 3!=6, 4!=24, 5!=120, 6!=720.' },
+  { tag:'⚙️ Engenharia',    text:'Uma bomba enche um tanque em 6h. Outra esvazia-o em 4h. Se ambas estiverem ligadas ao mesmo tempo, o que acontece?', hint:null, context:'Assume que o tanque começa cheio.', options:['a) Enche em 12h','b) Esvazia em 12h','c) Equilibram-se — nada acontece'], correct:1, time:60, explanation:'Taxa de enchimento: 1/6 /h. Esvaziamento: 1/4 /h. Como 1/4 > 1/6, esvazia. Taxa líquida: 1/4−1/6=1/12 /h → esvazia em 12h.' },
+  { tag:'🧊 Espacial',      text:'Quantas faces tem um cubo se lhe cortares exactamente um vértice (um canto)?', hint:null, context:null, options:['a) 6 faces','b) 7 faces','c) 8 faces'], correct:1, time:60, explanation:'O corte cria uma nova face triangular sem remover nenhuma das 6 existentes. Total: 7 faces.' },
+  { tag:'⚡ Física',        text:'Uma ponte aguenta 10 toneladas. Um camião de 9,9t para em cima dela e um pássaro pousa no capô. A ponte colapsa. Porquê?', hint:null, context:null, options:['a) O pássaro foi a gota de água','b) O travão gerou força dinâmica > 10t','c) A ponte já estava danificada'], correct:1, time:60, explanation:'Ao travar, o camião aplicou força dinâmica (F=m×a) muito superior à carga estática. Erro clássico: confundir carga estática com dinâmica.' },
+  { tag:'🧠 Lógica',        text:'Tens dois fios irregulares — cada um demora exactamente 1 hora a queimar. Sem relógio, como medes exactamente 45 minutos?', hint:null, context:'Os fios não queimam de forma uniforme, não podes medir pelo comprimento.', options:['a) Queimas metade de cada fio','b) Acendes o fio 1 dos dois extremos + fio 2 de uma ponta. Quando o fio 1 acabar, acendes o outro extremo do fio 2','c) É impossível sem relógio'], correct:1, time:60, explanation:'Fio 1 dos dois extremos → acaba em 30 min. Fio 2 tem 30 min restantes → acender outro extremo → mais 15 min. Total: 45 min ✅' },
+  { tag:'⚖️ Combinatória',  text:'Tens 12 bolas visualmente idênticas. Uma é diferente — pode ser mais pesada OU mais leve. Com uma balança de pratos (sem pesos), qual o mínimo de pesagens para identificar a bola E saber se é mais pesada ou mais leve?', hint:null, context:null, options:['a) 2 pesagens','b) 3 pesagens','c) 4 pesagens'], correct:1, time:60, explanation:'3 pesagens são suficientes. 1ª: 4 vs 4. Se equilibrar → a diferente está nas 4 restantes. As pesagens seguintes isolam a bola e determinam se é mais pesada ou leve.' },
+  { tag:'🦠 Contraintuitivo',text:'Uma bactéria duplica a cada minuto. Às 12:00 há 1 bactéria. Às 13:00 o frasco está completamente cheio. A que horas estava o frasco exactamente a metade?', hint:null, context:null, options:['a) 12:30','b) 12:59','c) 12:50'], correct:1, time:180, explanation:'Se às 13:00 está cheio e duplica a cada minuto, um minuto antes (12:59) estava a metade. Crescimento exponencial ≠ crescimento linear.' }
 ];
 
-// ═══════════════════════
-// STATE
-// ═══════════════════════
-let username = '';
-let currentQ = 0;
-let answers  = [];
-let timerInterval = null;
-let timeLeft = 0;
-let answered = false;
+// ── STATE ──
+let username     = '';
+let sessionCode  = '';
+let participantId = null;
+let currentQ     = -1;
+let answered     = false;
+let localAnswers = [];
+let timerInt     = null;
+let pollInt      = null;
+let timeLeft     = 0;
 
-// ═══════════════════════
-// SUPABASE
-// ═══════════════════════
-async function sbPost(table, body) {
-  try {
-    await fetch(`${SUPABASE_URL}/rest/v1/${table}`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'apikey': SUPABASE_KEY,
-        'Authorization': `Bearer ${SUPABASE_KEY}`,
-        'Prefer': 'return=minimal'
-      },
-      body: JSON.stringify(body)
-    });
-  } catch(e) { console.warn('Supabase save failed', e); }
+// ── HELPERS ──
+async function sb(path, method='GET', body=null) {
+  const opts = { method, headers:{'Content-Type':'application/json','apikey':SUPABASE_KEY,'Authorization':`Bearer ${SUPABASE_KEY}`,'Prefer':method==='POST'?'return=representation':''} };
+  if (body) opts.body = JSON.stringify(body);
+  const r = await fetch(`${SUPABASE_URL}/rest/v1/${path}`, opts);
+  if (!r.ok) return null;
+  try { return await r.json(); } catch { return null; }
 }
 
-async function sbGet(query) {
-  try {
-    const res = await fetch(`${SUPABASE_URL}/rest/v1/${query}`, {
-      headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` }
-    });
-    return res.ok ? res.json() : [];
-  } catch(e) { return []; }
+async function sbPatch(path, body) {
+  const r = await fetch(`${SUPABASE_URL}/rest/v1/${path}`, {
+    method:'PATCH',
+    headers:{'Content-Type':'application/json','apikey':SUPABASE_KEY,'Authorization':`Bearer ${SUPABASE_KEY}`,'Prefer':'return=minimal'},
+    body:JSON.stringify(body)
+  });
+  return r.ok;
 }
 
-// ═══════════════════════
-// UI
-// ═══════════════════════
 function showScreen(id) {
-  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
   document.getElementById(id).classList.add('active');
-  window.scrollTo(0, 0);
+  window.scrollTo(0,0);
 }
 
-// ═══════════════════════
-// LANDING
-// ═══════════════════════
-document.getElementById('username-input').addEventListener('input', function() {
-  document.getElementById('btn-start').disabled = this.value.trim().length < 2;
+// ── LANDING ──
+function checkInputs() {
+  const u = document.getElementById('username-input').value.trim();
+  const c = document.getElementById('code-input').value.trim();
+  document.getElementById('btn-join').disabled = u.length < 2 || c.length !== 5;
+}
+document.getElementById('username-input').addEventListener('input', checkInputs);
+document.getElementById('code-input').addEventListener('input', function() {
+  this.value = this.value.toUpperCase();
+  checkInputs();
 });
-document.getElementById('username-input').addEventListener('keydown', function(e) {
-  if (e.key === 'Enter' && this.value.trim().length >= 2) startQuiz();
-});
+document.getElementById('code-input').addEventListener('keydown', e => { if(e.key==='Enter') joinSession(); });
 
-function startQuiz() {
-  username = document.getElementById('username-input').value.trim();
-  currentQ = 0;
-  answers  = [];
-  document.getElementById('user-pill').textContent = username;
+async function joinSession() {
+  username    = document.getElementById('username-input').value.trim();
+  sessionCode = document.getElementById('code-input').value.trim().toUpperCase();
+
+  // Verify session exists
+  const sessions = await sb(`sessions?code=eq.${sessionCode}&select=code,current_q,state`);
+  if (!sessions || sessions.length === 0) {
+    document.getElementById('join-error').classList.add('show');
+    return;
+  }
+  document.getElementById('join-error').classList.remove('show');
+
+  // Register participant
+  const existing = await sb(`participants?session_code=eq.${sessionCode}&username=eq.${encodeURIComponent(username)}&select=id,answers`);
+  if (existing && existing.length > 0) {
+    participantId  = existing[0].id;
+    localAnswers   = JSON.parse(existing[0].answers || '[]');
+  } else {
+    const res = await sb('participants', 'POST', { session_code:sessionCode, username, answers:'[]', score:0 });
+    if (!res || res.length === 0) { alert('Erro ao entrar na sessão.'); return; }
+    participantId = res[0].id;
+    localAnswers  = [];
+  }
+
+  document.getElementById('waiting-name').textContent = username;
+  document.getElementById('user-pill').textContent    = username;
+  showScreen('screen-waiting');
+  startPollingSession(sessions[0]);
+}
+
+// ── SESSION POLLING ──
+function startPollingSession(initial) {
+  handleSessionState(initial);
+  clearInterval(pollInt);
+  pollInt = setInterval(async () => {
+    const data = await sb(`sessions?code=eq.${sessionCode}&select=current_q,state`);
+    if (data && data.length > 0) handleSessionState(data[0]);
+  }, 2000);
+}
+
+function handleSessionState(session) {
+  if (session.state === 'finished') {
+    clearInterval(pollInt);
+    clearInterval(timerInt);
+    showResults();
+    return;
+  }
+  if (session.state === 'question' && session.current_q !== currentQ) {
+    currentQ = session.current_q;
+    answered = false;
+    clearInterval(timerInt);
+    showQuestion(currentQ);
+  }
+}
+
+// ── QUESTION ──
+function showQuestion(qi) {
   showScreen('screen-quiz');
-  loadQuestion();
-}
-
-// ═══════════════════════
-// QUIZ
-// ═══════════════════════
-function loadQuestion() {
-  answered = false;
-  const q = QUESTIONS[currentQ];
-
-  document.getElementById('q-counter').textContent = `Pergunta ${currentQ + 1} / ${QUESTIONS.length}`;
-  document.getElementById('q-tag').textContent  = q.tag;
-  document.getElementById('q-text').textContent = q.text;
+  const q = QUESTIONS[qi];
+  document.getElementById('q-counter').textContent = `Pergunta ${qi+1} / ${QUESTIONS.length}`;
+  document.getElementById('q-tag').textContent     = q.tag;
+  document.getElementById('q-text').textContent    = q.text;
 
   const hintEl = document.getElementById('q-hint');
-  if (q.hint) { hintEl.textContent = q.hint; hintEl.style.display = 'block'; }
-  else { hintEl.style.display = 'none'; }
+  if (q.hint) { hintEl.textContent = q.hint; hintEl.style.display = 'block'; } else hintEl.style.display = 'none';
 
   const ctxEl = document.getElementById('q-context');
-  if (q.context) { ctxEl.textContent = q.context; ctxEl.style.display = 'block'; }
-  else { ctxEl.style.display = 'none'; }
+  if (q.context) { ctxEl.textContent = q.context; ctxEl.style.display = 'block'; } else ctxEl.style.display = 'none';
 
   const container = document.getElementById('options-container');
   container.innerHTML = '';
-  const letters = ['A', 'B', 'C'];
-  q.options.forEach((opt, i) => {
+  const letters = ['A','B','C'];
+  q.options.forEach((opt,i) => {
     const btn = document.createElement('button');
     btn.className = 'option-btn';
     btn.innerHTML = `<span class="letter">${letters[i]}</span><span>${opt}</span>`;
@@ -565,150 +315,111 @@ function loadQuestion() {
 
   document.getElementById('timeout-msg').classList.remove('show');
   document.getElementById('explanation').classList.remove('show');
-  document.getElementById('btn-next').classList.remove('show');
+  document.getElementById('next-wait').classList.remove('show');
 
   startTimer(q.time);
 }
 
 function startTimer(seconds) {
-  clearInterval(timerInterval);
+  clearInterval(timerInt);
   timeLeft = seconds;
   updateTimer(seconds, seconds);
-  timerInterval = setInterval(() => {
+  timerInt = setInterval(() => {
     timeLeft--;
     updateTimer(timeLeft, seconds);
-    if (timeLeft <= 0) { clearInterval(timerInterval); onTimeout(); }
+    if (timeLeft <= 0) { clearInterval(timerInt); onTimeout(); }
   }, 1000);
 }
 
 function updateTimer(left, total) {
-  const pct = (left / total) * 100;
-  const bar  = document.getElementById('timer-bar');
-  const lbl  = document.getElementById('timer-label');
-  bar.style.width = pct + '%';
-  const mins = Math.floor(left / 60);
-  const secs = left % 60;
-  lbl.textContent = mins > 0 ? `${mins}:${String(secs).padStart(2,'0')}` : `${left}s`;
-  bar.className = 'timer-bar' + (pct <= 20 ? ' danger' : pct <= 40 ? ' warning' : '');
-  lbl.className = 'timer-label' + (pct <= 20 ? ' danger' : pct <= 40 ? ' warning' : '');
+  const pct = (left/total)*100;
+  const bar = document.getElementById('timer-bar');
+  const lbl = document.getElementById('timer-label');
+  bar.style.width = pct+'%';
+  const mins = Math.floor(left/60), secs = left%60;
+  lbl.textContent = mins>0 ? `${mins}:${String(secs).padStart(2,'0')}` : `${left}s`;
+  bar.className = 'timer-bar'+(pct<=20?' danger':pct<=40?' warning':'');
+  lbl.className = 'timer-label'+(pct<=20?' danger':pct<=40?' warning':'');
 }
 
-function selectOption(idx) {
+async function selectOption(idx) {
   if (answered) return;
   answered = true;
-  clearInterval(timerInterval);
+  clearInterval(timerInt);
+
   const q = QUESTIONS[currentQ];
-  const btns = document.querySelectorAll('.option-btn');
   const isCorrect = idx === q.correct;
-  btns.forEach((btn, i) => {
+
+  document.querySelectorAll('.option-btn').forEach((btn,i) => {
     btn.disabled = true;
-    if (i === idx) btn.classList.add(isCorrect ? 'correct' : 'wrong');
-    if (!isCorrect && i === q.correct) btn.classList.add('reveal');
+    if (i===idx) btn.classList.add(isCorrect?'correct':'wrong');
+    if (!isCorrect && i===q.correct) btn.classList.add('reveal');
   });
-  answers.push({ q: currentQ, selected: idx, correct: isCorrect, timeout: false });
-  showExplanation(q.explanation);
-  document.getElementById('btn-next').classList.add('show');
+
+  // Save answer
+  while (localAnswers.length < currentQ) localAnswers.push(null);
+  localAnswers[currentQ] = idx;
+  const newScore = localAnswers.filter((a,i) => a === QUESTIONS[i]?.correct).length;
+
+  await sbPatch(`participants?id=eq.${participantId}`, {
+    answers: JSON.stringify(localAnswers),
+    score: newScore
+  });
+
+  document.getElementById('explanation-text').textContent = q.explanation;
+  document.getElementById('explanation').classList.add('show');
+  document.getElementById('next-wait').classList.add('show');
 }
 
-function onTimeout() {
+async function onTimeout() {
   if (answered) return;
   answered = true;
+
   const q = QUESTIONS[currentQ];
-  document.querySelectorAll('.option-btn').forEach((btn, i) => {
+  document.querySelectorAll('.option-btn').forEach((btn,i) => {
     btn.disabled = true;
-    if (i === q.correct) btn.classList.add('reveal');
+    if (i===q.correct) btn.classList.add('reveal');
   });
-  answers.push({ q: currentQ, selected: null, correct: false, timeout: true });
+
+  while (localAnswers.length < currentQ) localAnswers.push(null);
+  localAnswers[currentQ] = null;
+
+  await sbPatch(`participants?id=eq.${participantId}`, { answers: JSON.stringify(localAnswers) });
+
   document.getElementById('timeout-msg').classList.add('show');
-  showExplanation(q.explanation);
-  document.getElementById('btn-next').classList.add('show');
-}
-
-function showExplanation(text) {
-  document.getElementById('explanation-text').textContent = text;
+  document.getElementById('explanation-text').textContent = q.explanation;
   document.getElementById('explanation').classList.add('show');
+  document.getElementById('next-wait').classList.add('show');
 }
 
-function nextQuestion() {
-  currentQ++;
-  if (currentQ >= QUESTIONS.length) finishQuiz();
-  else { showScreen('screen-quiz'); loadQuestion(); }
-}
+// ── RESULTS ──
+function showResults() {
+  clearInterval(pollInt);
+  clearInterval(timerInt);
 
-// ═══════════════════════
-// RESULTS
-// ═══════════════════════
-async function finishQuiz() {
-  const correct = answers.filter(a => a.correct).length;
+  const correct = localAnswers.filter((a,i) => a === QUESTIONS[i]?.correct).length;
   const total   = QUESTIONS.length;
+  const emoji   = correct>=7?'🧠':correct>=5?'💪':correct>=3?'😅':'💀';
 
-  await sbPost('quiz_results', {
-    username,
-    score: correct,
-    total,
-    answers: JSON.stringify(answers),
-    played_at: new Date().toISOString()
-  });
-
-  const emoji = correct >= 7 ? '🧠' : correct >= 5 ? '💪' : correct >= 3 ? '😅' : '💀';
   document.getElementById('result-emoji').textContent = emoji;
   document.getElementById('result-name').textContent  = username;
   document.getElementById('result-score').textContent = `${correct}/${total}`;
 
   const bd = document.getElementById('result-breakdown');
   bd.innerHTML = '';
-  answers.forEach(a => {
-    const q   = QUESTIONS[a.q];
+  localAnswers.forEach((a,i) => {
+    const q = QUESTIONS[i];
     const row = document.createElement('div');
     row.className = 'breakdown-row';
     let cls, txt;
-    if (a.timeout)      { cls = 'badge-timeout'; txt = '⏰ Tempo'; }
-    else if (a.correct) { cls = 'badge-correct'; txt = '✓ Certo'; }
-    else                { cls = 'badge-wrong';   txt = '✗ Errado'; }
-    row.innerHTML = `<span class="breakdown-q">${a.q + 1}. ${q.tag}</span><span class="breakdown-badge ${cls}">${txt}</span>`;
+    if (a===null||a===undefined) { cls='badge-timeout'; txt='⏰ Tempo'; }
+    else if (a===q.correct)      { cls='badge-correct'; txt='✓ Certo'; }
+    else                         { cls='badge-wrong';   txt='✗ Errado'; }
+    row.innerHTML = `<span class="breakdown-q">${i+1}. ${q.tag}</span><span class="breakdown-badge ${cls}">${txt}</span>`;
     bd.appendChild(row);
   });
 
   showScreen('screen-results');
-}
-
-// ═══════════════════════
-// LEADERBOARD
-// ═══════════════════════
-async function showLeaderboard() {
-  showScreen('screen-leaderboard');
-  const list = document.getElementById('lb-list');
-  list.innerHTML = '<div class="lb-loading">A carregar...</div>';
-
-  const data = await sbGet('quiz_results?select=username,score,total,played_at&order=score.desc,played_at.asc&limit=100');
-
-  if (!data || data.length === 0) {
-    list.innerHTML = '<div class="lb-loading">Sem resultados ainda.</div>';
-    return;
-  }
-
-  // Best score per user
-  const best = {};
-  data.forEach(r => {
-    if (!best[r.username] || r.score > best[r.username].score) best[r.username] = r;
-  });
-  const sorted = Object.values(best).sort((a,b) => b.score - a.score || new Date(a.played_at) - new Date(b.played_at));
-
-  list.innerHTML = '';
-  const medals = ['🥇','🥈','🥉'];
-  sorted.forEach((r, i) => {
-    const isMe = r.username === username;
-    const row  = document.createElement('div');
-    row.className = 'lb-row' + (isMe ? ' me' : '');
-    row.innerHTML = `
-      <div class="lb-rank">${i < 3 ? medals[i] : i + 1}</div>
-      <div class="lb-name">${r.username}${isMe ? ' <span style="font-size:11px;color:var(--accent)">(tu)</span>' : ''}</div>
-      <div style="text-align:right">
-        <div class="lb-score">${r.score}/${r.total}</div>
-        <div class="lb-detail">${Math.round(r.score/r.total*100)}%</div>
-      </div>`;
-    list.appendChild(row);
-  });
 }
 </script>
 </body>

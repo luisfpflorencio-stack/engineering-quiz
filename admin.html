@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MFE23 IceBreaker — Admin</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+  :root {
+    --bg: #f5f7fa; --surface: #fff; --accent: #2563eb; --accent-light: #eff6ff;
+    --accent-dark: #1d4ed8; --text: #1e293b; --text-muted: #64748b;
+    --border: #e2e8f0; --green: #16a34a; --green-light: #f0fdf4;
+    --red: #dc2626; --red-light: #fef2f2; --gold: #d97706; --gold-light: #fffbeb;
+    --shadow: 0 2px 12px rgba(0,0,0,0.08);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; padding: 24px; }
+  .screen { display: none; max-width: 900px; margin: 0 auto; }
+  .screen.active { display: block; animation: up 0.3s ease; }
+  @keyframes up { from { opacity:0; transform:translateY(10px); } to { opacity:1; transform:translateY(0); } }
+
+  .card { background: var(--surface); border-radius: 16px; box-shadow: var(--shadow); padding: 28px 24px; margin-bottom: 16px; }
+
+  h1 { font-size: 28px; font-weight: 800; margin-bottom: 6px; }
+  h2 { font-size: 20px; font-weight: 700; margin-bottom: 16px; }
+
+  .badge { display:inline-block; background:var(--accent-light); color:var(--accent); font-size:11px; font-weight:700; letter-spacing:.1em; text-transform:uppercase; padding:4px 12px; border-radius:100px; margin-bottom:16px; }
+
+  input[type="text"], input[type="password"] {
+    width:100%; padding:13px 16px; border:1.5px solid var(--border); border-radius:12px;
+    font-size:15px; font-family:'Inter',sans-serif; color:var(--text); background:var(--bg);
+    outline:none; transition:border-color .2s; margin-bottom:12px;
+  }
+  input:focus { border-color:var(--accent); background:#fff; }
+
+  .btn { display:inline-flex; align-items:center; justify-content:center; gap:8px; padding:13px 24px; border:none; border-radius:12px; font-size:15px; font-weight:700; cursor:pointer; transition:all .15s; font-family:'Inter',sans-serif; }
+  .btn-primary { background:var(--accent); color:#fff; width:100%; }
+  .btn-primary:hover { background:var(--accent-dark); }
+  .btn-primary:active { transform:scale(0.98); }
+  .btn-primary:disabled { background:var(--border); color:var(--text-muted); cursor:not-allowed; }
+  .btn-green  { background:var(--green); color:#fff; width:100%; }
+  .btn-green:hover { background:#15803d; }
+  .btn-red    { background:var(--red); color:#fff; }
+  .btn-red:hover { background:#b91c1c; }
+  .btn-outline { background:transparent; border:1.5px solid var(--border); color:var(--text); }
+  .btn-outline:hover { border-color:var(--accent); color:var(--accent); }
+  .btn-lg { padding:18px 32px; font-size:18px; }
+
+  .error-msg { background:var(--red-light); color:var(--red); border-radius:10px; padding:12px 16px; font-size:14px; font-weight:600; margin-bottom:12px; display:none; }
+  .error-msg.show { display:block; }
+
+  /* SESSION CODE */
+  .session-code {
+    font-size: 72px; font-weight: 800; letter-spacing: 0.15em; color: var(--accent);
+    text-align: center; padding: 24px; background: var(--accent-light);
+    border-radius: 16px; margin: 16px 0; line-height: 1;
+  }
+  .code-label { text-align:center; font-size:13px; color:var(--text-muted); font-weight:600; text-transform:uppercase; letter-spacing:.08em; margin-bottom:8px; }
+
+  /* WAITING ROOM */
+  .participants-grid { display:flex; flex-wrap:wrap; gap:8px; margin-top:12px; min-height:60px; }
+  .participant-chip {
+    background:var(--accent-light); color:var(--accent); border-radius:100px;
+    padding:6px 14px; font-size:13px; font-weight:600;
+    animation: up 0.3s ease;
+  }
+  .participant-count { font-size:32px; font-weight:800; color:var(--accent); }
+  .participant-count-label { font-size:13px; color:var(--text-muted); }
+
+  /* QUESTION VIEW */
+  .q-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:20px; flex-wrap:wrap; gap:12px; }
+  .q-num { font-size:13px; font-weight:700; color:var(--text-muted); text-transform:uppercase; letter-spacing:.08em; }
+  .q-tag-badge { background:var(--accent-light); color:var(--accent); padding:4px 12px; border-radius:100px; font-size:12px; font-weight:700; }
+
+  .q-display {
+    font-size: 22px; font-weight: 700; line-height: 1.4; margin-bottom: 12px;
+  }
+  .q-hint-display {
+    font-size: 28px; font-weight: 800; color: var(--accent); letter-spacing: .15em;
+    padding: 16px; background: var(--accent-light); border-radius: 12px;
+    text-align: center; margin-bottom: 20px;
+  }
+  .q-context-display {
+    font-size: 14px; color: var(--text-muted); padding: 12px 14px;
+    background: var(--bg); border-radius: 10px; border-left: 3px solid var(--accent);
+    margin-bottom: 20px;
+  }
+
+  /* Timer */
+  .timer-big { font-size: 56px; font-weight: 800; text-align: center; color: var(--accent); line-height:1; }
+  .timer-big.warning { color: var(--gold); }
+  .timer-big.danger  { color: var(--red); }
+  .timer-bar-bg { width:100%; height:8px; background:var(--border); border-radius:100px; overflow:hidden; margin-top:12px; }
+  .timer-bar { height:100%; border-radius:100px; background:var(--accent); transition:width 1s linear, background .5s; }
+  .timer-bar.warning { background:var(--gold); }
+  .timer-bar.danger  { background:var(--red); }
+
+  /* Options display */
+  .options-display { display:flex; flex-direction:column; gap:8px; margin-top:16px; }
+  .opt-row {
+    display:flex; align-items:center; gap:12px; padding:12px 16px;
+    background:var(--bg); border-radius:10px; border:1.5px solid var(--border);
+  }
+  .opt-row.correct { border-color:var(--green); background:var(--green-light); }
+  .opt-letter { width:30px; height:30px; border-radius:8px; background:var(--border); display:flex; align-items:center; justify-content:center; font-weight:700; font-size:13px; flex-shrink:0; }
+  .opt-row.correct .opt-letter { background:var(--green); color:#fff; }
+  .opt-text { font-size:14px; font-weight:500; flex:1; }
+  .opt-count { font-size:13px; font-weight:700; color:var(--text-muted); }
+
+  /* Leaderboard */
+  .lb-list { display:flex; flex-direction:column; gap:8px; }
+  .lb-row { display:flex; align-items:center; gap:12px; padding:12px 16px; background:var(--bg); border-radius:10px; }
+  .lb-rank { font-size:16px; font-weight:800; width:28px; text-align:center; color:var(--text-muted); }
+  .lb-row:nth-child(1) .lb-rank { color:#f59e0b; font-size:20px; }
+  .lb-row:nth-child(2) .lb-rank { color:#94a3b8; font-size:18px; }
+  .lb-row:nth-child(3) .lb-rank { color:#b45309; font-size:18px; }
+  .lb-name { flex:1; font-weight:600; font-size:15px; }
+  .lb-score { font-weight:800; font-size:16px; color:var(--accent); }
+  .lb-answers { font-size:11px; color:var(--text-muted); }
+
+  /* 2-col layout */
+  .two-col { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+  @media(max-width:600px) { .two-col { grid-template-columns:1fr; } }
+
+  .stat-box { text-align:center; padding:20px; background:var(--bg); border-radius:12px; }
+  .stat-big { font-size:36px; font-weight:800; color:var(--accent); }
+  .stat-lbl { font-size:12px; color:var(--text-muted); font-weight:600; text-transform:uppercase; letter-spacing:.08em; margin-top:4px; }
+
+  .answered-bar-bg { width:100%; height:6px; background:var(--border); border-radius:100px; overflow:hidden; margin-top:8px; }
+  .answered-bar { height:100%; background:var(--green); border-radius:100px; transition:width .5s; }
+
+  /* State pill */
+  .state-pill { display:inline-block; padding:4px 12px; border-radius:100px; font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:.08em; }
+  .state-waiting  { background:var(--gold-light); color:var(--gold); }
+  .state-question { background:var(--accent-light); color:var(--accent); }
+  .state-finished { background:var(--green-light); color:var(--green); }
+</style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div id="screen-login" class="screen active">
+  <div class="card" style="max-width:400px;margin:60px auto">
+    <div class="badge">⚙️ Admin</div>
+    <h1>MFE23 IceBreaker</h1>
+    <p style="color:var(--text-muted);font-size:14px;margin-bottom:24px;margin-top:6px">Painel de controlo do quiz</p>
+    <div class="error-msg" id="login-error">Password incorrecta.</div>
+    <label style="font-size:13px;font-weight:600;display:block;margin-bottom:8px">Password</label>
+    <input type="password" id="pw-input" placeholder="••••••••" />
+    <button class="btn btn-primary" onclick="doLogin()">Entrar →</button>
+  </div>
+</div>
+
+<!-- DASHBOARD -->
+<div id="screen-dashboard" class="screen">
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;flex-wrap:wrap;gap:12px">
+    <div>
+      <div class="badge">⚙️ MFE23 IceBreaker — Admin</div>
+      <h1>Painel de Controlo</h1>
+    </div>
+    <button class="btn btn-outline" onclick="createSession()">+ Nova Sessão</button>
+  </div>
+
+  <div id="no-session" class="card" style="text-align:center;padding:40px">
+    <div style="font-size:40px;margin-bottom:12px">🎯</div>
+    <div style="font-size:18px;font-weight:700;margin-bottom:8px">Nenhuma sessão activa</div>
+    <div style="color:var(--text-muted);font-size:14px;margin-bottom:20px">Cria uma nova sessão para começar o quiz</div>
+    <button class="btn btn-primary" style="max-width:240px;margin:0 auto" onclick="createSession()">Criar Sessão →</button>
+  </div>
+
+  <div id="session-panel" style="display:none">
+    <!-- Code + status -->
+    <div class="two-col">
+      <div class="card" style="text-align:center">
+        <div class="code-label">Código da Sessão</div>
+        <div class="session-code" id="session-code-display">—</div>
+        <div style="font-size:13px;color:var(--text-muted)">Partilha este código com a equipa</div>
+      </div>
+      <div class="card">
+        <div style="font-size:13px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:12px">Estado</div>
+        <div id="state-pill-wrap" style="margin-bottom:16px"><span class="state-pill state-waiting" id="state-pill">Sala de espera</span></div>
+        <div class="stat-box">
+          <div class="stat-big" id="participant-count">0</div>
+          <div class="stat-lbl">Participantes</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Waiting room -->
+    <div class="card" id="waiting-panel">
+      <h2>👥 Sala de Espera</h2>
+      <div class="participants-grid" id="participants-grid"></div>
+      <div style="margin-top:20px">
+        <button class="btn btn-green btn-lg" id="btn-start-quiz" onclick="startQuiz()" disabled>Iniciar Quiz →</button>
+      </div>
+    </div>
+
+    <!-- Question control -->
+    <div id="question-panel" style="display:none">
+      <div class="two-col">
+        <!-- Left: question -->
+        <div class="card">
+          <div class="q-header">
+            <div class="q-num" id="admin-q-num">Pergunta 1 / 8</div>
+            <span class="q-tag-badge" id="admin-q-tag"></span>
+          </div>
+          <div class="q-display" id="admin-q-text"></div>
+          <div id="admin-q-hint" style="display:none" class="q-hint-display"></div>
+          <div id="admin-q-context" style="display:none" class="q-context-display"></div>
+          <div class="options-display" id="admin-options"></div>
+        </div>
+
+        <!-- Right: timer + stats -->
+        <div>
+          <div class="card" style="text-align:center">
+            <div style="font-size:13px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:12px">Tempo Restante</div>
+            <div class="timer-big" id="admin-timer">60</div>
+            <div class="timer-bar-bg"><div class="timer-bar" id="admin-timer-bar"></div></div>
+          </div>
+
+          <div class="card">
+            <div style="font-size:13px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:12px">Respostas Recebidas</div>
+            <div style="display:flex;align-items:baseline;gap:8px">
+              <div class="stat-big" id="answered-count">0</div>
+              <div style="font-size:18px;color:var(--text-muted)" id="answered-total">/ 0</div>
+            </div>
+            <div class="answered-bar-bg"><div class="answered-bar" id="answered-bar"></div></div>
+          </div>
+
+          <div class="card">
+            <button class="btn btn-primary" id="btn-next-q" onclick="nextQuestion()" disabled>Próxima Pergunta →</button>
+            <div style="margin-top:8px;font-size:12px;color:var(--text-muted);text-align:center" id="next-hint">Disponível quando o tempo acabar ou todos responderem</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Live leaderboard -->
+      <div class="card">
+        <h2>🏆 Leaderboard ao Vivo</h2>
+        <div class="lb-list" id="admin-lb"></div>
+      </div>
+    </div>
+
+    <!-- Finished -->
+    <div id="finished-panel" style="display:none" class="card" style="text-align:center">
+      <div style="font-size:48px;margin-bottom:16px">🏁</div>
+      <h2>Quiz Terminado!</h2>
+      <div class="lb-list" id="final-lb" style="margin-top:16px"></div>
+      <button class="btn btn-outline" style="margin-top:16px;max-width:240px" onclick="createSession()">Nova Sessão</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const SUPABASE_URL = 'https://ijwgivgtpbonferzayju.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_6dFS89RL1DywcIH9_9BUPA_GhhgmKKl';
+const ADMIN_PW     = 'se1best';
+
+const QUESTIONS = [
+  { tag:'🔤 Código',        text:'Qual é a palavra escondida nesta sequência de números?', hint:'3  ·  1  ·  6  ·  5', context:null, options:['a) café','b) casa','c) copo'], correct:0, time:45 },
+  { tag:'🔢 Sequências',    text:'Qual é o número que falta?', hint:'1  ·  2  ·  6  ·  24  ·  120  ·  ___', context:null, options:['a) 360','b) 720','c) 600'], correct:1, time:60 },
+  { tag:'⚙️ Engenharia',    text:'Uma bomba enche um tanque em 6h. Outra esvazia-o em 4h. Se ambas estiverem ligadas ao mesmo tempo, o que acontece?', hint:null, context:'Assume que o tanque começa cheio.', options:['a) Enche em 12h','b) Esvazia em 12h','c) Equilibram-se — nada acontece'], correct:1, time:60 },
+  { tag:'🧊 Espacial',      text:'Quantas faces tem um cubo se lhe cortares exactamente um vértice (um canto)?', hint:null, context:null, options:['a) 6 faces','b) 7 faces','c) 8 faces'], correct:1, time:60 },
+  { tag:'⚡ Física',        text:'Uma ponte aguenta 10 toneladas. Um camião de 9,9t para em cima dela e um pássaro pousa no capô. A ponte colapsa. Porquê?', hint:null, context:null, options:['a) O pássaro foi a gota de água','b) O travão gerou força dinâmica > 10t','c) A ponte já estava danificada'], correct:1, time:60 },
+  { tag:'🧠 Lógica',        text:'Tens dois fios irregulares — cada um demora exactamente 1 hora a queimar. Sem relógio, como medes exactamente 45 minutos?', hint:null, context:'Os fios não queimam de forma uniforme, não podes medir pelo comprimento.', options:['a) Queimas metade de cada fio','b) Acendes o fio 1 dos dois extremos + fio 2 de uma ponta. Quando o fio 1 acabar, acendes o outro extremo do fio 2','c) É impossível sem relógio'], correct:1, time:60 },
+  { tag:'⚖️ Combinatória',  text:'Tens 12 bolas visualmente idênticas. Uma é diferente — pode ser mais pesada OU mais leve. Com uma balança de pratos (sem pesos), qual o mínimo de pesagens para identificar a bola E saber se é mais pesada ou mais leve?', hint:null, context:null, options:['a) 2 pesagens','b) 3 pesagens','c) 4 pesagens'], correct:1, time:60 },
+  { tag:'🦠 Contraintuitivo',text:'Uma bactéria duplica a cada minuto. Às 12:00 há 1 bactéria. Às 13:00 o frasco está completamente cheio. A que horas estava o frasco exactamente a metade?', hint:null, context:null, options:['a) 12:30','b) 12:59','c) 12:50'], correct:1, time:180 }
+];
+
+// ── STATE ──
+let sessionCode = null;
+let currentQ    = -1;
+let timerInt    = null;
+let timeLeft    = 0;
+let pollInt     = null;
+let totalParticipants = 0;
+
+// ── HELPERS ──
+async function sb(path, method='GET', body=null) {
+  const opts = { method, headers: { 'Content-Type':'application/json', 'apikey':SUPABASE_KEY, 'Authorization':`Bearer ${SUPABASE_KEY}`, 'Prefer': method==='POST'?'return=representation':'' } };
+  if (body) opts.body = JSON.stringify(body);
+  const r = await fetch(`${SUPABASE_URL}/rest/v1/${path}`, opts);
+  if (!r.ok) { console.error(await r.text()); return null; }
+  try { return await r.json(); } catch { return null; }
+}
+
+async function sbPatch(path, body) {
+  const r = await fetch(`${SUPABASE_URL}/rest/v1/${path}`, {
+    method:'PATCH',
+    headers:{ 'Content-Type':'application/json','apikey':SUPABASE_KEY,'Authorization':`Bearer ${SUPABASE_KEY}`,'Prefer':'return=minimal' },
+    body: JSON.stringify(body)
+  });
+  return r.ok;
+}
+
+function genCode() {
+  return Array.from({length:5}, () => 'ABCDEFGHJKLMNPQRSTUVWXYZ'[Math.floor(Math.random()*24)]).join('');
+}
+
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+}
+
+// ── LOGIN ──
+document.getElementById('pw-input').addEventListener('keydown', e => { if(e.key==='Enter') doLogin(); });
+
+function doLogin() {
+  const pw = document.getElementById('pw-input').value;
+  if (pw === ADMIN_PW) {
+    showScreen('screen-dashboard');
+    checkExistingSession();
+  } else {
+    document.getElementById('login-error').classList.add('show');
+  }
+}
+
+// ── SESSION ──
+async function checkExistingSession() {
+  const data = await sb('sessions?select=code,current_q,state&order=created_at.desc&limit=1');
+  if (data && data.length > 0 && data[0].state !== 'finished') {
+    sessionCode = data[0].code;
+    currentQ    = data[0].current_q;
+    document.getElementById('no-session').style.display    = 'none';
+    document.getElementById('session-panel').style.display = 'block';
+    document.getElementById('session-code-display').textContent = sessionCode;
+    if (data[0].state === 'waiting') startPollingWaiting();
+    else if (data[0].state === 'question') resumeQuestion();
+    else if (data[0].state === 'finished') showFinished();
+  }
+}
+
+async function createSession() {
+  clearInterval(pollInt);
+  clearInterval(timerInt);
+  const code = genCode();
+  const res  = await sb('sessions', 'POST', { code, current_q:-1, state:'waiting' });
+  if (!res) return alert('Erro ao criar sessão.');
+  sessionCode = code;
+  currentQ    = -1;
+  document.getElementById('no-session').style.display    = 'none';
+  document.getElementById('session-panel').style.display = 'block';
+  document.getElementById('session-code-display').textContent = code;
+  document.getElementById('waiting-panel').style.display  = 'block';
+  document.getElementById('question-panel').style.display = 'none';
+  document.getElementById('finished-panel').style.display = 'none';
+  document.getElementById('participants-grid').innerHTML   = '';
+  document.getElementById('participant-count').textContent = '0';
+  document.getElementById('btn-start-quiz').disabled = true;
+  updateStatePill('waiting');
+  startPollingWaiting();
+}
+
+// ── WAITING ROOM POLLING ──
+function startPollingWaiting() {
+  clearInterval(pollInt);
+  pollParticipants();
+  pollInt = setInterval(pollParticipants, 3000);
+}
+
+async function pollParticipants() {
+  const data = await sb(`participants?select=username&session_code=eq.${sessionCode}&order=joined_at.asc`);
+  if (!data) return;
+  totalParticipants = data.length;
+  document.getElementById('participant-count').textContent = data.length;
+  document.getElementById('btn-start-quiz').disabled = data.length < 1;
+  const grid = document.getElementById('participants-grid');
+  grid.innerHTML = '';
+  data.forEach(p => {
+    const chip = document.createElement('div');
+    chip.className = 'participant-chip';
+    chip.textContent = p.username;
+    grid.appendChild(chip);
+  });
+}
+
+// ── START QUIZ ──
+async function startQuiz() {
+  clearInterval(pollInt);
+  currentQ = 0;
+  await sbPatch(`sessions?code=eq.${sessionCode}`, { current_q:0, state:'question' });
+  showQuestionAdmin(0);
+}
+
+function resumeQuestion() {
+  document.getElementById('waiting-panel').style.display  = 'none';
+  document.getElementById('question-panel').style.display = 'block';
+  showQuestionAdmin(currentQ);
+}
+
+// ── QUESTION ──
+function showQuestionAdmin(qi) {
+  document.getElementById('waiting-panel').style.display  = 'none';
+  document.getElementById('question-panel').style.display = 'block';
+  document.getElementById('finished-panel').style.display = 'none';
+  updateStatePill('question');
+
+  const q = QUESTIONS[qi];
+  document.getElementById('admin-q-num').textContent  = `Pergunta ${qi+1} / ${QUESTIONS.length}`;
+  document.getElementById('admin-q-tag').textContent  = q.tag;
+  document.getElementById('admin-q-text').textContent = q.text;
+
+  const hintEl = document.getElementById('admin-q-hint');
+  if (q.hint) { hintEl.textContent = q.hint; hintEl.style.display = 'block'; } else hintEl.style.display = 'none';
+
+  const ctxEl = document.getElementById('admin-q-context');
+  if (q.context) { ctxEl.textContent = q.context; ctxEl.style.display = 'block'; } else ctxEl.style.display = 'none';
+
+  const opts = document.getElementById('admin-options');
+  opts.innerHTML = '';
+  const letters = ['A','B','C'];
+  q.options.forEach((o,i) => {
+    const row = document.createElement('div');
+    row.className = 'opt-row' + (i===q.correct?' correct':'');
+    row.id = `opt-row-${i}`;
+    row.innerHTML = `<div class="opt-letter">${letters[i]}</div><div class="opt-text">${o}</div><div class="opt-count" id="opt-count-${i}">0</div>`;
+    opts.appendChild(row);
+  });
+
+  document.getElementById('btn-next-q').disabled = true;
+  document.getElementById('next-hint').style.display = 'block';
+  document.getElementById('answered-count').textContent = '0';
+  document.getElementById('answered-total').textContent = `/ ${totalParticipants}`;
+  document.getElementById('answered-bar').style.width = '0%';
+
+  startAdminTimer(q.time);
+  startPollingAnswers(qi);
+}
+
+function startAdminTimer(seconds) {
+  clearInterval(timerInt);
+  timeLeft = seconds;
+  updateAdminTimer(seconds, seconds);
+  timerInt = setInterval(() => {
+    timeLeft--;
+    updateAdminTimer(timeLeft, seconds);
+    if (timeLeft <= 0) {
+      clearInterval(timerInt);
+      document.getElementById('btn-next-q').disabled = false;
+      document.getElementById('next-hint').style.display = 'none';
+    }
+  }, 1000);
+}
+
+function updateAdminTimer(left, total) {
+  const pct  = (left/total)*100;
+  const el   = document.getElementById('admin-timer');
+  const bar  = document.getElementById('admin-timer-bar');
+  const mins = Math.floor(left/60);
+  const secs = left%60;
+  el.textContent  = mins>0 ? `${mins}:${String(secs).padStart(2,'0')}` : `${left}s`;
+  bar.style.width = pct+'%';
+  el.className    = 'timer-big'  + (pct<=20?' danger':pct<=40?' warning':'');
+  bar.className   = 'timer-bar' + (pct<=20?' danger':pct<=40?' warning':'');
+}
+
+// ── POLL ANSWERS ──
+function startPollingAnswers(qi) {
+  clearInterval(pollInt);
+  pollAnswers(qi);
+  pollInt = setInterval(() => pollAnswers(qi), 2500);
+}
+
+async function pollAnswers(qi) {
+  const data = await sb(`participants?select=username,answers,score&session_code=eq.${sessionCode}&order=score.desc`);
+  if (!data) return;
+
+  // Count answers for this question
+  const counts = [0,0,0];
+  let answered = 0;
+  data.forEach(p => {
+    const ans = JSON.parse(p.answers || '[]');
+    if (ans[qi] !== undefined && ans[qi] !== null) {
+      answered++;
+      if (ans[qi] >= 0 && ans[qi] <= 2) counts[ans[qi]]++;
+    }
+  });
+
+  document.getElementById('answered-count').textContent = answered;
+  document.getElementById('answered-total').textContent = `/ ${totalParticipants}`;
+  const pct = totalParticipants > 0 ? (answered/totalParticipants)*100 : 0;
+  document.getElementById('answered-bar').style.width = pct+'%';
+
+  // Update option counts
+  counts.forEach((c,i) => {
+    const el = document.getElementById(`opt-count-${i}`);
+    if (el) el.textContent = c;
+  });
+
+  // Enable next if all answered
+  if (answered >= totalParticipants && totalParticipants > 0) {
+    clearInterval(timerInt);
+    document.getElementById('btn-next-q').disabled = false;
+    document.getElementById('next-hint').style.display = 'none';
+  }
+
+  // Update leaderboard
+  updateLiveLeaderboard(data);
+}
+
+function updateLiveLeaderboard(data) {
+  const sorted = [...data].sort((a,b) => b.score - a.score);
+  const medals = ['🥇','🥈','🥉'];
+  const lb = document.getElementById('admin-lb');
+  lb.innerHTML = '';
+  sorted.slice(0,10).forEach((p,i) => {
+    const ans = JSON.parse(p.answers||'[]');
+    const row = document.createElement('div');
+    row.className = 'lb-row';
+    row.innerHTML = `
+      <div class="lb-rank">${i<3?medals[i]:i+1}</div>
+      <div class="lb-name">${p.username}</div>
+      <div style="text-align:right">
+        <div class="lb-score">${p.score} pts</div>
+        <div class="lb-answers">${ans.filter(a=>a!==null&&a!==undefined).length} respostas</div>
+      </div>`;
+    lb.appendChild(row);
+  });
+}
+
+// ── NEXT QUESTION ──
+async function nextQuestion() {
+  clearInterval(pollInt);
+  clearInterval(timerInt);
+  currentQ++;
+  if (currentQ >= QUESTIONS.length) {
+    await sbPatch(`sessions?code=eq.${sessionCode}`, { current_q:99, state:'finished' });
+    showFinished();
+  } else {
+    await sbPatch(`sessions?code=eq.${sessionCode}`, { current_q:currentQ, state:'question' });
+    showQuestionAdmin(currentQ);
+  }
+}
+
+// ── FINISHED ──
+async function showFinished() {
+  clearInterval(pollInt);
+  clearInterval(timerInt);
+  updateStatePill('finished');
+  document.getElementById('question-panel').style.display = 'none';
+  document.getElementById('waiting-panel').style.display  = 'none';
+  document.getElementById('finished-panel').style.display = 'block';
+
+  const data = await sb(`participants?select=username,score,answers&session_code=eq.${sessionCode}&order=score.desc`);
+  if (!data) return;
+  const medals = ['🥇','🥈','🥉'];
+  const lb = document.getElementById('final-lb');
+  lb.innerHTML = '';
+  data.forEach((p,i) => {
+    const row = document.createElement('div');
+    row.className = 'lb-row';
+    row.innerHTML = `
+      <div class="lb-rank">${i<3?medals[i]:i+1}</div>
+      <div class="lb-name">${p.username}</div>
+      <div class="lb-score">${p.score} pts</div>`;
+    lb.appendChild(row);
+  });
+}
+
+// ── UI ──
+function updateStatePill(state) {
+  const el = document.getElementById('state-pill');
+  el.className = `state-pill state-${state}`;
+  el.textContent = state==='waiting'?'Sala de espera':state==='question'?'A decorrer':'Terminado';
+}
+</script>
+</body>
+</html>
