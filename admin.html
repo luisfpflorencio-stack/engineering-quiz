@@ -12,257 +12,276 @@
     --accent-dark:#1d4ed8;--text:#1e293b;--text-muted:#64748b;
     --border:#e2e8f0;--green:#16a34a;--green-light:#f0fdf4;
     --red:#dc2626;--red-light:#fef2f2;--gold:#d97706;--gold-light:#fffbeb;
+    --purple:#7c3aed;--purple-light:#f5f3ff;
     --shadow:0 2px 12px rgba(0,0,0,0.08);
   }
   *{box-sizing:border-box;margin:0;padding:0;}
-  body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;padding:24px;}
-  .screen{display:none;max-width:960px;margin:0 auto;}
+  body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;padding:16px;}
+
+  .screen{display:none;}
   .screen.active{display:block;animation:up .3s ease;}
-  @keyframes up{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
-  .card{background:var(--surface);border-radius:16px;box-shadow:var(--shadow);padding:28px 24px;margin-bottom:16px;}
-  .badge{display:inline-block;background:var(--accent-light);color:var(--accent);font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:4px 12px;border-radius:100px;margin-bottom:16px;}
-  input[type="text"],input[type="password"]{width:100%;padding:13px 16px;border:1.5px solid var(--border);border-radius:12px;font-size:15px;font-family:'Inter',sans-serif;color:var(--text);background:var(--bg);outline:none;transition:border-color .2s;margin-bottom:12px;}
+  @keyframes up{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+
+  .card{background:var(--surface);border-radius:14px;box-shadow:var(--shadow);padding:20px;margin-bottom:12px;}
+  .badge{display:inline-block;background:var(--accent-light);color:var(--accent);font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:4px 12px;border-radius:100px;margin-bottom:12px;}
+
+  input[type="text"],input[type="password"]{width:100%;padding:12px 14px;border:1.5px solid var(--border);border-radius:10px;font-size:15px;font-family:'Inter',sans-serif;color:var(--text);background:var(--bg);outline:none;transition:border-color .2s;margin-bottom:10px;}
   input:focus{border-color:var(--accent);background:#fff;}
-  .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:13px 24px;border:none;border-radius:12px;font-size:15px;font-weight:700;cursor:pointer;transition:all .15s;font-family:'Inter',sans-serif;}
-  .btn-primary{background:var(--accent);color:#fff;width:100%;}
+
+  .btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;padding:11px 20px;border:none;border-radius:10px;font-size:14px;font-weight:700;cursor:pointer;transition:all .15s;font-family:'Inter',sans-serif;}
+  .btn-primary{background:var(--accent);color:#fff;}
   .btn-primary:hover{background:var(--accent-dark);}
-  .btn-primary:active{transform:scale(.98);}
   .btn-primary:disabled{background:var(--border);color:var(--text-muted);cursor:not-allowed;}
-  .btn-green{background:var(--green);color:#fff;width:100%;}
+  .btn-green{background:var(--green);color:#fff;}
   .btn-green:hover{background:#15803d;}
   .btn-outline{background:transparent;border:1.5px solid var(--border);color:var(--text);}
   .btn-outline:hover{border-color:var(--accent);color:var(--accent);}
-  .btn-lg{padding:18px 32px;font-size:18px;}
-  .error-msg{background:var(--red-light);color:var(--red);border-radius:10px;padding:12px 16px;font-size:14px;font-weight:600;margin-bottom:12px;display:none;}
+  .btn-full{width:100%;}
+
+  .error-msg{background:var(--red-light);color:var(--red);border-radius:10px;padding:10px 14px;font-size:13px;font-weight:600;margin-bottom:10px;display:none;}
   .error-msg.show{display:block;}
-  .two-col{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
-  .three-col{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;}
-  @media(max-width:700px){.two-col,.three-col{grid-template-columns:1fr;}}
+
+  /* ── LANDSCAPE LAYOUT ── */
+  .dash-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;}
+  .main-layout{display:grid;grid-template-columns:1fr 320px;gap:12px;align-items:start;}
+  .right-col{display:flex;flex-direction:column;gap:12px;}
 
   /* Session code */
-  .session-code{font-size:64px;font-weight:800;letter-spacing:.15em;color:var(--accent);text-align:center;padding:20px;background:var(--accent-light);border-radius:16px;line-height:1;}
-  .code-label{text-align:center;font-size:12px;color:var(--text-muted);font-weight:600;text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px;}
-
-  /* QR */
-  .qr-wrap{display:flex;flex-direction:column;align-items:center;gap:10px;padding:16px;background:var(--bg);border-radius:12px;}
-  .qr-wrap canvas,.qr-wrap img{border-radius:8px;}
-  .qr-label{font-size:12px;color:var(--text-muted);font-weight:600;text-align:center;}
+  .session-code{font-size:52px;font-weight:800;letter-spacing:.12em;color:var(--accent);text-align:center;padding:16px;background:var(--accent-light);border-radius:12px;line-height:1;}
+  .code-label{text-align:center;font-size:11px;color:var(--text-muted);font-weight:600;text-transform:uppercase;letter-spacing:.08em;margin-bottom:6px;}
+  .qr-wrap{display:flex;flex-direction:column;align-items:center;gap:8px;padding:12px;background:var(--bg);border-radius:10px;margin-top:10px;}
+  .qr-label{font-size:10px;color:var(--text-muted);text-align:center;word-break:break-all;}
 
   /* Participants */
-  .participants-grid{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px;min-height:48px;}
-  .participant-chip{background:var(--accent-light);color:var(--accent);border-radius:100px;padding:6px 14px;font-size:13px;font-weight:600;animation:up .3s ease;}
+  .participants-grid{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px;min-height:36px;}
+  .participant-chip{background:var(--accent-light);color:var(--accent);border-radius:100px;padding:4px 12px;font-size:12px;font-weight:600;animation:up .3s ease;}
 
-  /* Stat boxes */
-  .stat-box{text-align:center;padding:16px;background:var(--bg);border-radius:12px;}
-  .stat-big{font-size:32px;font-weight:800;color:var(--accent);}
-  .stat-lbl{font-size:11px;color:var(--text-muted);font-weight:600;text-transform:uppercase;letter-spacing:.08em;margin-top:4px;}
+  /* Stats row */
+  .stats-row{display:flex;gap:10px;}
+  .stat-box{flex:1;text-align:center;padding:12px 8px;background:var(--bg);border-radius:10px;}
+  .stat-big{font-size:26px;font-weight:800;color:var(--accent);}
+  .stat-lbl{font-size:10px;color:var(--text-muted);font-weight:600;text-transform:uppercase;letter-spacing:.06em;margin-top:2px;}
 
   /* Timer */
-  .timer-big{font-size:52px;font-weight:800;text-align:center;color:var(--accent);line-height:1;font-variant-numeric:tabular-nums;}
+  .timer-big{font-size:56px;font-weight:800;text-align:center;color:var(--accent);line-height:1;font-variant-numeric:tabular-nums;}
   .timer-big.warning{color:var(--gold);}
   .timer-big.danger{color:var(--red);}
-  .timer-bar-bg{width:100%;height:8px;background:var(--border);border-radius:100px;overflow:hidden;margin-top:12px;}
+  .timer-bar-bg{width:100%;height:8px;background:var(--border);border-radius:100px;overflow:hidden;margin-top:10px;}
   .timer-bar{height:100%;border-radius:100px;background:var(--accent);transition:width 1s linear,background .5s;}
   .timer-bar.warning{background:var(--gold);}
   .timer-bar.danger{background:var(--red);}
 
-  /* Question display */
-  .q-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:8px;}
-  .q-num{font-size:12px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:.08em;}
-  .q-tag-badge{background:var(--accent-light);color:var(--accent);padding:4px 12px;border-radius:100px;font-size:12px;font-weight:700;}
-  .q-display{font-size:20px;font-weight:700;line-height:1.4;margin-bottom:12px;}
-  .q-hint-display{font-size:26px;font-weight:800;color:var(--accent);letter-spacing:.15em;padding:14px;background:var(--accent-light);border-radius:12px;text-align:center;margin-bottom:16px;}
-  .q-context-display{font-size:13px;color:var(--text-muted);padding:12px 14px;background:var(--bg);border-radius:10px;border-left:3px solid var(--accent);margin-bottom:16px;}
+  /* Question */
+  .section-title{font-size:11px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:10px;}
+  .q-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;flex-wrap:wrap;gap:6px;}
+  .q-num{font-size:11px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:.08em;}
+  .q-tag-badge{padding:3px 10px;border-radius:100px;font-size:11px;font-weight:700;}
+  .q-tag-badge.normal{background:var(--accent-light);color:var(--accent);}
+  .q-tag-badge.bonus{background:var(--purple-light);color:var(--purple);}
+  .q-display{font-size:17px;font-weight:700;line-height:1.4;margin-bottom:10px;}
+  .q-hint-display{font-size:22px;font-weight:800;color:var(--accent);letter-spacing:.12em;padding:12px;background:var(--accent-light);border-radius:10px;text-align:center;margin-bottom:12px;}
+  .q-context-display{font-size:12px;color:var(--text-muted);padding:10px 12px;background:var(--bg);border-radius:8px;border-left:3px solid var(--accent);margin-bottom:12px;}
 
-  /* Options — no correct highlight during question */
-  .options-display{display:flex;flex-direction:column;gap:8px;margin-top:12px;}
-  .opt-row{display:flex;align-items:center;gap:12px;padding:12px 16px;background:var(--bg);border-radius:10px;border:1.5px solid var(--border);}
+  /* Options */
+  .options-display{display:flex;flex-direction:column;gap:6px;margin-top:10px;}
+  .opt-row{display:flex;align-items:center;gap:10px;padding:10px 12px;background:var(--bg);border-radius:8px;border:1.5px solid var(--border);}
   .opt-row.reveal-correct{border-color:var(--green);background:var(--green-light);}
-  .opt-letter{width:30px;height:30px;border-radius:8px;background:var(--border);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px;flex-shrink:0;color:var(--text-muted);}
+  .opt-letter{width:28px;height:28px;border-radius:6px;background:var(--border);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:12px;flex-shrink:0;color:var(--text-muted);}
   .opt-row.reveal-correct .opt-letter{background:var(--green);color:#fff;}
-  .opt-text{font-size:14px;font-weight:500;flex:1;}
-  .opt-bar-wrap{display:flex;align-items:center;gap:8px;min-width:80px;}
-  .opt-bar-bg{flex:1;height:6px;background:var(--border);border-radius:100px;overflow:hidden;}
+  .opt-text{font-size:13px;font-weight:500;flex:1;}
+  .opt-bar-wrap{display:flex;align-items:center;gap:6px;min-width:70px;}
+  .opt-bar-bg{flex:1;height:5px;background:var(--border);border-radius:100px;overflow:hidden;}
   .opt-bar-fill{height:100%;background:var(--accent);border-radius:100px;transition:width .5s;}
-  .opt-count{font-size:13px;font-weight:700;color:var(--text-muted);min-width:20px;text-align:right;}
+  .opt-count{font-size:12px;font-weight:700;color:var(--text-muted);min-width:18px;text-align:right;}
 
-  /* Explanation box (only shown after time) */
-  .explanation-box{display:none;margin-top:16px;padding:14px 16px;background:var(--green-light);border-left:3px solid var(--green);border-radius:12px;}
+  /* Explanation */
+  .explanation-box{display:none;margin-top:12px;padding:12px 14px;background:var(--green-light);border-left:3px solid var(--green);border-radius:10px;}
   .explanation-box.show{display:block;animation:up .3s ease;}
-  .explanation-title{font-size:11px;font-weight:700;color:var(--green);text-transform:uppercase;letter-spacing:.1em;margin-bottom:6px;}
-  .explanation-text{font-size:14px;color:var(--text);line-height:1.5;}
+  .explanation-title{font-size:10px;font-weight:700;color:var(--green);text-transform:uppercase;letter-spacing:.1em;margin-bottom:4px;}
+  .explanation-text{font-size:13px;color:var(--text);line-height:1.5;}
 
-  /* Ready counter */
-  .ready-bar-bg{width:100%;height:6px;background:var(--border);border-radius:100px;overflow:hidden;margin-top:8px;}
-  .ready-bar{height:100%;background:var(--green);border-radius:100px;transition:width .5s;}
+  /* Progress bars */
+  .mini-bar-bg{width:100%;height:5px;background:var(--border);border-radius:100px;overflow:hidden;margin-top:6px;}
+  .mini-bar{height:100%;border-radius:100px;transition:width .5s;}
+  .mini-bar.answered{background:var(--accent);}
+  .mini-bar.ready{background:var(--green);}
 
   /* Leaderboard */
-  .lb-list{display:flex;flex-direction:column;gap:8px;}
-  .lb-row{display:flex;align-items:center;gap:12px;padding:12px 16px;background:var(--bg);border-radius:10px;}
-  .lb-rank{font-size:16px;font-weight:800;width:28px;text-align:center;color:var(--text-muted);}
-  .lb-row:nth-child(1) .lb-rank{color:#f59e0b;font-size:20px;}
-  .lb-row:nth-child(2) .lb-rank{color:#94a3b8;font-size:18px;}
-  .lb-row:nth-child(3) .lb-rank{color:#b45309;font-size:18px;}
-  .lb-name{flex:1;font-weight:600;font-size:15px;}
-  .lb-score{font-weight:800;font-size:16px;color:var(--accent);}
-  .lb-detail{font-size:11px;color:var(--text-muted);}
-  .lb-loading{text-align:center;padding:24px;color:var(--text-muted);font-size:14px;}
+  .lb-list{display:flex;flex-direction:column;gap:6px;}
+  .lb-row{display:flex;align-items:center;gap:10px;padding:10px 12px;background:var(--bg);border-radius:8px;}
+  .lb-rank{font-size:14px;font-weight:800;width:24px;text-align:center;color:var(--text-muted);}
+  .lb-row:nth-child(1) .lb-rank{color:#f59e0b;font-size:18px;}
+  .lb-row:nth-child(2) .lb-rank{color:#94a3b8;font-size:16px;}
+  .lb-row:nth-child(3) .lb-rank{color:#b45309;font-size:15px;}
+  .lb-name{flex:1;font-weight:600;font-size:13px;}
+  .lb-score{font-weight:800;font-size:14px;color:var(--accent);}
+  .lb-detail{font-size:10px;color:var(--text-muted);}
+  .lb-loading{text-align:center;padding:16px;color:var(--text-muted);font-size:13px;}
+
+  /* Countdown overlay for 10s lag */
+  .lag-overlay{display:none;position:fixed;inset:0;background:rgba(30,58,95,0.85);z-index:100;align-items:center;justify-content:center;flex-direction:column;gap:12px;}
+  .lag-overlay.show{display:flex;}
+  .lag-num{font-size:96px;font-weight:800;color:#fff;line-height:1;}
+  .lag-text{font-size:16px;color:rgba(255,255,255,0.7);font-weight:600;}
 
   /* State pill */
-  .state-pill{display:inline-block;padding:4px 12px;border-radius:100px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;}
+  .state-pill{display:inline-block;padding:3px 10px;border-radius:100px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;}
   .state-waiting{background:var(--gold-light);color:var(--gold);}
   .state-question{background:var(--accent-light);color:var(--accent);}
   .state-finished{background:var(--green-light);color:var(--green);}
-
-  /* Section title */
-  .section-title{font-size:12px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:12px;}
 </style>
 </head>
 <body>
 
+<!-- 10s LAG OVERLAY -->
+<div class="lag-overlay" id="lag-overlay">
+  <div class="lag-num" id="lag-num">10</div>
+  <div class="lag-text">A revelar resposta em...</div>
+</div>
+
 <!-- LOGIN -->
-<div id="screen-login" class="screen active">
-  <div class="card" style="max-width:400px;margin:60px auto">
+<div id="screen-login" class="screen active" style="max-width:380px;margin:60px auto">
+  <div class="card">
     <div class="badge">⚙️ Admin</div>
-    <h1 style="font-size:26px;font-weight:800;margin-bottom:6px">MFE23 IceBreaker</h1>
-    <p style="color:var(--text-muted);font-size:14px;margin-bottom:24px">Painel de controlo do quiz</p>
+    <h1 style="font-size:22px;font-weight:800;margin-bottom:4px">MFE23 IceBreaker</h1>
+    <p style="color:var(--text-muted);font-size:13px;margin-bottom:20px">Painel de controlo</p>
     <div class="error-msg" id="login-error">Password incorrecta.</div>
-    <label style="font-size:13px;font-weight:600;display:block;margin-bottom:8px">Password</label>
+    <label style="font-size:12px;font-weight:600;display:block;margin-bottom:6px">Password</label>
     <input type="password" id="pw-input" placeholder="••••••••" />
-    <button class="btn btn-primary" onclick="doLogin()">Entrar →</button>
+    <button class="btn btn-primary btn-full" onclick="doLogin()">Entrar →</button>
   </div>
 </div>
 
 <!-- DASHBOARD -->
 <div id="screen-dashboard" class="screen">
-  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;flex-wrap:wrap;gap:12px">
+
+  <div class="dash-header">
     <div>
       <div class="badge">⚙️ MFE23 IceBreaker — Admin</div>
-      <h1 style="font-size:24px;font-weight:800">Painel de Controlo</h1>
+      <h1 style="font-size:20px;font-weight:800">Painel de Controlo</h1>
     </div>
-    <button class="btn btn-outline" onclick="createSession()">+ Nova Sessão</button>
+    <div style="display:flex;gap:8px;align-items:center">
+      <span class="state-pill state-waiting" id="state-pill">Sala de espera</span>
+      <button class="btn btn-outline" onclick="createSession()">+ Nova Sessão</button>
+    </div>
   </div>
 
   <!-- No session -->
   <div id="no-session" class="card" style="text-align:center;padding:40px">
-    <div style="font-size:40px;margin-bottom:12px">🎯</div>
-    <div style="font-size:18px;font-weight:700;margin-bottom:8px">Nenhuma sessão activa</div>
-    <div style="color:var(--text-muted);font-size:14px;margin-bottom:20px">Cria uma nova sessão para começar</div>
-    <button class="btn btn-primary" style="max-width:240px;margin:0 auto" onclick="createSession()">Criar Sessão →</button>
+    <div style="font-size:36px;margin-bottom:10px">🎯</div>
+    <div style="font-size:16px;font-weight:700;margin-bottom:6px">Nenhuma sessão activa</div>
+    <div style="color:var(--text-muted);font-size:13px;margin-bottom:16px">Cria uma nova sessão para começar</div>
+    <button class="btn btn-primary" style="max-width:200px;margin:0 auto" onclick="createSession()">Criar Sessão →</button>
   </div>
 
   <div id="session-panel" style="display:none">
 
-    <!-- Top row: code + QR + status -->
-    <div class="three-col">
-      <div class="card" style="text-align:center">
-        <div class="code-label">Código da Sessão</div>
-        <div class="session-code" id="session-code-display">—</div>
-        <div style="font-size:12px;color:var(--text-muted);margin-top:8px">Partilha com a equipa</div>
-      </div>
-      <div class="card" style="display:flex;flex-direction:column;align-items:center;justify-content:center;">
-        <div class="section-title" style="margin-bottom:12px">QR Code — Acesso Directo</div>
-        <div class="qr-wrap">
-          <div id="qr-code"></div>
-          <div class="qr-label" id="qr-label">—</div>
-        </div>
-      </div>
-      <div class="card">
-        <div class="section-title">Estado</div>
-        <div style="margin-bottom:16px"><span class="state-pill state-waiting" id="state-pill">Sala de espera</span></div>
-        <div class="stat-box">
-          <div class="stat-big" id="participant-count">0</div>
-          <div class="stat-lbl">Participantes</div>
-        </div>
-      </div>
-    </div>
-
     <!-- WAITING ROOM -->
-    <div class="card" id="waiting-panel">
-      <div class="section-title">👥 Sala de Espera</div>
-      <div class="participants-grid" id="participants-grid"></div>
-      <div style="margin-top:20px">
-        <button class="btn btn-green btn-lg" id="btn-start-quiz" onclick="startQuiz()" disabled>Iniciar Quiz →</button>
+    <div id="waiting-panel">
+      <div class="main-layout">
+        <div class="card">
+          <div class="section-title">👥 Sala de Espera</div>
+          <div class="participants-grid" id="participants-grid"></div>
+          <div style="margin-top:14px">
+            <button class="btn btn-green btn-full" id="btn-start-quiz" onclick="startQuiz()" disabled style="font-size:16px;padding:14px">Iniciar Quiz →</button>
+          </div>
+        </div>
+        <div class="right-col">
+          <div class="card" style="text-align:center">
+            <div class="code-label">Código da Sessão</div>
+            <div class="session-code" id="session-code-display">—</div>
+            <div class="stat-box" style="margin-top:10px">
+              <div class="stat-big" id="participant-count">0</div>
+              <div class="stat-lbl">Participantes</div>
+            </div>
+            <div class="qr-wrap">
+              <div id="qr-code"></div>
+              <div class="qr-label" id="qr-label">—</div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
 
     <!-- QUESTION PANEL -->
     <div id="question-panel" style="display:none">
-      <div class="two-col">
+      <div class="main-layout">
 
-        <!-- Left: question + options -->
-        <div class="card">
-          <div class="q-header">
-            <div class="q-num" id="admin-q-num">Pergunta 1 / 8</div>
-            <span class="q-tag-badge" id="admin-q-tag"></span>
+        <!-- Left: question + options + leaderboard -->
+        <div>
+          <div class="card">
+            <div class="q-header">
+              <div class="q-num" id="admin-q-num">Pergunta 1 / 12</div>
+              <span class="q-tag-badge normal" id="admin-q-tag"></span>
+            </div>
+            <div class="q-display" id="admin-q-text"></div>
+            <div id="admin-q-hint" style="display:none" class="q-hint-display"></div>
+            <div id="admin-q-context" style="display:none" class="q-context-display"></div>
+            <div class="options-display" id="admin-options"></div>
+            <div class="explanation-box" id="explanation-box">
+              <div class="explanation-title">💡 Resposta Correcta</div>
+              <div class="explanation-text" id="explanation-text"></div>
+            </div>
           </div>
-          <div class="q-display" id="admin-q-text"></div>
-          <div id="admin-q-hint" style="display:none" class="q-hint-display"></div>
-          <div id="admin-q-context" style="display:none" class="q-context-display"></div>
-          <div class="options-display" id="admin-options"></div>
-          <!-- Explanation only shown after time ends -->
-          <div class="explanation-box" id="explanation-box">
-            <div class="explanation-title">💡 Resposta Correcta</div>
-            <div class="explanation-text" id="explanation-text"></div>
+
+          <div class="card">
+            <div class="section-title">🏆 Leaderboard ao Vivo</div>
+            <div class="lb-list" id="admin-lb"><div class="lb-loading">A aguardar respostas...</div></div>
           </div>
         </div>
 
-        <!-- Right: timer + stats + next -->
-        <div style="display:flex;flex-direction:column;gap:16px">
+        <!-- Right col -->
+        <div class="right-col">
+
+          <!-- Timer -->
           <div class="card" style="text-align:center">
             <div class="section-title">Tempo Restante</div>
-            <div class="timer-big" id="admin-timer">60</div>
-            <div class="timer-bar-bg"><div class="timer-bar" id="admin-timer-bar"></div></div>
+            <div class="timer-big" id="admin-timer">—</div>
+            <div class="timer-bar-bg"><div class="timer-bar" id="admin-timer-bar" style="width:100%"></div></div>
           </div>
 
+          <!-- Responses -->
           <div class="card">
-            <div class="section-title">Respostas Recebidas</div>
-            <div style="display:flex;align-items:baseline;gap:8px;margin-bottom:8px">
+            <div class="section-title">Respostas</div>
+            <div style="display:flex;align-items:baseline;gap:6px">
               <div class="stat-big" id="answered-count">0</div>
-              <div style="font-size:18px;color:var(--text-muted)" id="answered-total">/ 0</div>
+              <div style="font-size:16px;color:var(--text-muted)" id="answered-total">/ 0</div>
             </div>
-            <div style="height:6px;background:var(--border);border-radius:100px;overflow:hidden">
-              <div id="answered-bar" style="height:100%;background:var(--accent);border-radius:100px;transition:width .5s;width:0%"></div>
-            </div>
+            <div class="mini-bar-bg"><div class="mini-bar answered" id="answered-bar" style="width:0%"></div></div>
           </div>
 
+          <!-- Ready -->
           <div class="card">
             <div class="section-title">Prontos para avançar</div>
-            <div style="display:flex;align-items:baseline;gap:8px;margin-bottom:8px">
+            <div style="display:flex;align-items:baseline;gap:6px">
               <div class="stat-big" id="ready-count">0</div>
-              <div style="font-size:18px;color:var(--text-muted)" id="ready-total">/ 0</div>
+              <div style="font-size:16px;color:var(--text-muted)" id="ready-total">/ 0</div>
             </div>
-            <div class="ready-bar-bg"><div class="ready-bar" id="ready-bar"></div></div>
-            <div style="font-size:11px;color:var(--text-muted);margin-top:6px">Participantes que já responderam</div>
+            <div class="mini-bar-bg"><div class="mini-bar ready" id="ready-bar" style="width:0%"></div></div>
           </div>
 
+          <!-- Next button — always available -->
           <div class="card">
-            <button class="btn btn-primary" id="btn-next-q" onclick="nextQuestion()" disabled>Próxima Pergunta →</button>
-            <div style="margin-top:8px;font-size:12px;color:var(--text-muted);text-align:center" id="next-hint">Disponível quando o tempo acabar</div>
+            <button class="btn btn-primary btn-full" id="btn-next-q" onclick="nextQuestion()" style="font-size:15px;padding:14px">Próxima Pergunta →</button>
           </div>
-        </div>
-      </div>
 
-      <!-- Live leaderboard -->
-      <div class="card">
-        <div class="section-title">🏆 Leaderboard ao Vivo</div>
-        <div class="lb-list" id="admin-lb"><div class="lb-loading">A aguardar respostas...</div></div>
+        </div>
       </div>
     </div>
 
     <!-- FINISHED -->
     <div id="finished-panel" style="display:none" class="card">
-      <div style="text-align:center;padding:24px 0 16px">
-        <div style="font-size:48px;margin-bottom:12px">🏁</div>
-        <h2 style="font-size:22px;font-weight:800;margin-bottom:4px">Quiz Terminado!</h2>
-        <p style="color:var(--text-muted);font-size:14px">Ranking final</p>
+      <div style="text-align:center;padding:20px 0 14px">
+        <div style="font-size:44px;margin-bottom:10px">🏁</div>
+        <h2 style="font-size:20px;font-weight:800;margin-bottom:4px">Quiz Terminado!</h2>
+        <p style="color:var(--text-muted);font-size:13px">Ranking final</p>
       </div>
       <div class="lb-list" id="final-lb"></div>
-      <button class="btn btn-outline" style="margin-top:16px;max-width:200px" onclick="createSession()">Nova Sessão</button>
+      <button class="btn btn-outline" style="margin-top:14px;max-width:180px" onclick="createSession()">Nova Sessão</button>
     </div>
 
-  </div><!-- /session-panel -->
-</div><!-- /screen-dashboard -->
+  </div>
+</div>
 
 <script>
 const SUPABASE_URL = 'https://ijwgivgtpbonferzayju.supabase.co';
@@ -271,19 +290,23 @@ const ADMIN_PW     = 'se1best';
 const SITE_URL     = window.location.origin + window.location.pathname.replace('admin.html','');
 
 const QUESTIONS = [
-  { tag:'🔤 Código',          text:'Qual é a palavra escondida nesta sequência de números?',                                                                                                         hint:'3  ·  1  ·  6  ·  5',              context:null,                                                                         options:['a) café','b) casa','c) copo'],                                                                                                                                                                                                  correct:0, time:45,  explanation:'Cada número é a posição da letra no alfabeto: 3=C, 1=A, 6=F, 5=E → CAFE → café ☕' },
-  { tag:'🔢 Sequências',      text:'Qual é o número que falta?',                                                                                                                                    hint:'1  ·  2  ·  6  ·  24  ·  120  ·  ___', context:null,                                                                      options:['a) 360','b) 720','c) 600'],                                                                                                                                                                                                     correct:1, time:60,  explanation:'É a sequência de fatoriais: 1!=1, 2!=2, 3!=6, 4!=24, 5!=120, 6!=720.' },
-  { tag:'⚙️ Engenharia',      text:'Uma bomba enche um tanque em 6h. Outra esvazia-o em 4h. Se ambas estiverem ligadas ao mesmo tempo, o que acontece?',                                            hint:null,                                context:'Assume que o tanque começa cheio.',                                           options:['a) Enche em 12h','b) Esvazia em 12h','c) Equilibram-se — nada acontece'],                                                                                                                                                       correct:1, time:60,  explanation:'Taxa de enchimento: 1/6 /h. Esvaziamento: 1/4 /h. Como 1/4 > 1/6, esvazia. Taxa líquida: 1/4−1/6=1/12 /h → esvazia em 12h.' },
-  { tag:'🧊 Espacial',        text:'Quantas faces tem um cubo se lhe cortares exactamente um vértice (um canto)?',                                                                                  hint:null,                                context:null,                                                                         options:['a) 6 faces','b) 7 faces','c) 8 faces'],                                                                                                                                                                                        correct:1, time:60,  explanation:'O corte cria uma nova face triangular sem remover nenhuma das 6 existentes. Total: 7 faces.' },
-  { tag:'⚡ Física',           text:'Uma ponte aguenta 10 toneladas. Um camião de 9,9t para em cima dela e um pássaro pousa no capô. A ponte colapsa. Porquê?',                                     hint:null,                                context:null,                                                                         options:['a) O pássaro foi a gota de água','b) O travão gerou força dinâmica > 10t','c) A ponte já estava danificada'],                                                                                                                    correct:1, time:60,  explanation:'Ao travar, o camião aplicou força dinâmica (F=m×a) muito superior à carga estática. Erro clássico: confundir carga estática com dinâmica.' },
-  { tag:'🧠 Lógica',          text:'Tens dois fios irregulares — cada um demora exactamente 1 hora a queimar. Sem relógio, como medes exactamente 45 minutos?',                                    hint:null,                                context:'Os fios não queimam de forma uniforme, não podes medir pelo comprimento.',   options:['a) Queimas metade de cada fio','b) Acendes o fio 1 dos dois extremos + fio 2 de uma ponta. Quando o fio 1 acabar, acendes o outro extremo do fio 2','c) É impossível sem relógio'],                                            correct:1, time:60,  explanation:'Fio 1 dos dois extremos → acaba em 30 min. Fio 2 tem 30 min restantes → acender outro extremo → mais 15 min. Total: 45 min ✅' },
-  { tag:'⚖️ Combinatória',    text:'Tens 12 bolas visualmente idênticas. Uma é diferente — pode ser mais pesada OU mais leve. Com uma balança de pratos (sem pesos), qual o mínimo de pesagens?', hint:null,                                context:null,                                                                         options:['a) 2 pesagens','b) 3 pesagens','c) 4 pesagens'],                                                                                                                                                                               correct:1, time:60,  explanation:'3 pesagens são suficientes. 1ª: 4 vs 4. Se equilibrar → diferente nas 4 restantes. As pesagens seguintes isolam a bola e determinam se é mais pesada ou leve.' },
-  { tag:'🦠 Contraintuitivo', text:'Uma bactéria duplica a cada minuto. Às 12:00 há 1 bactéria. Às 13:00 o frasco está completamente cheio. A que horas estava o frasco exactamente a metade?',  hint:null,                                context:null,                                                                         options:['a) 12:30','b) 12:59','c) 12:50'],                                                                                                                                                                                               correct:1, time:180, explanation:'Se às 13:00 está cheio e duplica a cada minuto, um minuto antes (12:59) estava a metade. Crescimento exponencial ≠ crescimento linear.' }
+  { tag:'🔤 Código',          bonus:false, text:'Qual é a palavra escondida nesta sequência de números?',                                                                                                         hint:'3  ·  1  ·  6  ·  5',              context:null,                                                                         options:['a) café','b) casa','c) copo'],                                                                                                                                                                                                  correct:0, time:45,  explanation:'Cada número é a posição da letra no alfabeto: 3=C, 1=A, 6=F, 5=E → CAFE → café ☕' },
+  { tag:'🔢 Sequências',      bonus:false, text:'Qual é o número que falta?',                                                                                                                                    hint:'1  ·  2  ·  6  ·  24  ·  120  ·  ___', context:null,                                                                      options:['a) 360','b) 720','c) 600'],                                                                                                                                                                                                     correct:1, time:60,  explanation:'É a sequência de fatoriais: 1!=1, 2!=2, 3!=6, 4!=24, 5!=120, 6!=720.' },
+  { tag:'⚙️ Engenharia',      bonus:false, text:'Uma bomba enche um tanque em 6h. Outra esvazia-o em 4h. Se ambas estiverem ligadas ao mesmo tempo, o que acontece?',                                            hint:null,                                context:'Assume que o tanque começa cheio.',                                           options:['a) Enche em 12h','b) Esvazia em 12h','c) Ficam em equilíbrio indefinidamente'],                                                                                                                                                 correct:1, time:60,  explanation:'Taxa de enchimento: 1/6 /h. Esvaziamento: 1/4 /h. Como 1/4 > 1/6, esvazia. Taxa líquida: 1/4−1/6=1/12 /h → esvazia em 12h.' },
+  { tag:'🧊 Espacial',        bonus:false, text:'Quantas faces tem um cubo se lhe cortares exactamente um vértice (um canto)?',                                                                                  hint:null,                                context:null,                                                                         options:['a) 6 faces','b) 7 faces','c) 8 faces'],                                                                                                                                                                                        correct:1, time:60,  explanation:'O corte cria uma nova face triangular sem remover nenhuma das 6 existentes. Total: 7 faces.' },
+  { tag:'⚡ Física',           bonus:false, text:'Um homem está dentro de um elevador a cair em queda livre e coloca-se em cima de uma balança. O que marca a balança durante a queda?',                          hint:null,                                context:null,                                                                         options:['a) O peso normal do homem','b) Zero — o homem fica em imponderabilidade','c) O dobro do peso — o impacto da queda'],                                                                                                            correct:1, time:60,  explanation:'Em queda livre, tanto o homem como a balança aceleram à mesma taxa (g). Não há força normal entre eles — a balança marca zero. É o mesmo princípio da imponderabilidade nos astronautas.' },
+  { tag:'🧠 Lógica',          bonus:false, text:'Tens dois fios irregulares — cada um demora exactamente 1 hora a queimar. Sem relógio, como medes exactamente 45 minutos?',                                    hint:null,                                context:'Os fios não queimam de forma uniforme — não podes medir pelo comprimento.',  options:['a) Divides cada fio a meio e queimas as metades em sequência','b) Acendes um fio pelos dois extremos ao mesmo tempo que acendes o outro só por um. Quando o primeiro acabar, acendes o segundo extremo do outro fio','c) Queimas os dois em simultâneo pelos mesmos extremos e estimas visualmente'],                 correct:1, time:60,  explanation:'Fio 1 dos dois extremos → acaba em 30 min. Fio 2 tem 30 min restantes → acender outro extremo → mais 15 min. Total: 45 min ✅' },
+  { tag:'⚖️ Combinatória',    bonus:false, text:'Tens 12 bolas visualmente idênticas. Uma é diferente — pode ser mais pesada OU mais leve. Com uma balança de pratos (sem pesos), qual o mínimo de pesagens para identificar a bola E saber se é mais pesada ou mais leve?', hint:null, context:null, options:['a) 2 pesagens','b) 3 pesagens','c) 4 pesagens'], correct:1, time:60, explanation:'3 pesagens são suficientes. 1ª: 4 vs 4. Se equilibrar → diferente nas 4 restantes. As pesagens seguintes isolam a bola e determinam se é mais pesada ou leve.' },
+  { tag:'🎲 Probabilidade',   bonus:false, text:'Numa sala com 30 pessoas, qual é a probabilidade aproximada de pelo menos duas fazerem anos no mesmo dia?',                                                      hint:null,                                context:null,                                                                         options:['a) Cerca de 30%','b) Cerca de 70%','c) Cerca de 50%'],                                                                                                                                                                         correct:1, time:60,  explanation:'É o famoso "Problema do Aniversário". Com 30 pessoas, a probabilidade é ~70.6%. A intuição diz que precisamos de 183 pessoas para ter 50%, mas bastam 23!' },
+  { tag:'🔢 Matemática',      bonus:false, text:'Quantos zeros tem o número 100! (fatorial de 100) no final?',                                                                                                   hint:null,                                context:'100! = 1 × 2 × 3 × ... × 100',                                               options:['a) 20 zeros','b) 24 zeros','c) 10 zeros'],                                                                                                                                                                                     correct:1, time:60,  explanation:'Cada zero final vem de um factor 10 = 2×5. Contamos os múltiplos de 5: ⌊100/5⌋ + ⌊100/25⌋ = 20 + 4 = 24 zeros.' },
+  { tag:'🍺 Bónus — Física',  bonus:true,  text:'A que temperatura (em °C) a água congela a uma pressão de 3 atmosferas — semelhante à pressão típica num barril de cerveja pressurizado?',                     hint:null,                                context:'A pressão afecta o ponto de congelação da água.',                             options:['a) −0.02°C','b) 0°C','c) −5°C'],                                                                                                                                                                                               correct:0, time:60,  explanation:'A água tem o ponto de fusão ligeiramente reduzido com o aumento de pressão. A 3 atm, congela a ≈ −0.02°C — quase 0, mas não exactamente!' },
+  { tag:'🍺 Bónus — História', bonus:true, text:'Qual foi a primeira civilização conhecida a produzir cerveja em grande escala e a incluí-la como pagamento de salários?',                                       hint:null,                                context:null,                                                                         options:['a) Egípcios','b) Sumérios','c) Romanos'],                                                                                                                                                                                       correct:1, time:60,  explanation:'Os Sumérios (Mesopotâmia, ~4000 a.C.) pagavam salários em cerveja. Existem tabletas cuneiformes com receitas de cerveja datadas de ~1800 a.C.' },
+  { tag:'🍺 Bónus — Química', bonus:true,  text:'Qual é o nome do processo biológico que transforma açúcares em álcool etílico e CO₂ na produção de cerveja?',                                                  hint:null,                                context:null,                                                                         options:['a) Destilação','b) Oxidação','c) Fermentação'],                                                                                                                                                                                 correct:2, time:60,  explanation:'A fermentação alcoólica é realizada por leveduras (Saccharomyces cerevisiae) que convertem glucose em etanol e CO₂ — criando o álcool e parte da carbonatação.' },
 ];
 
-let sessionCode=null, currentQ=-1, timerInt=null, pollInt=null, timeLeft=0, totalParticipants=0, timeExpired=false;
+let sessionCode=null, currentQ=-1, timerInt=null, pollInt=null, lagInt=null;
+let timeLeft=0, totalParticipants=0;
 
-// ── HELPERS ──
 async function sb(path,method='GET',body=null){
   const opts={method,headers:{'Content-Type':'application/json','apikey':SUPABASE_KEY,'Authorization':`Bearer ${SUPABASE_KEY}`,'Prefer':method==='POST'?'return=representation':''}};
   if(body) opts.body=JSON.stringify(body);
@@ -297,28 +320,27 @@ async function sbPatch(path,body){
 function genCode(){return Array.from({length:5},()=>'ABCDEFGHJKLMNPQRSTUVWXYZ'[Math.floor(Math.random()*24)]).join('');}
 function showScreen(id){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));document.getElementById(id).classList.add('active');}
 
-// ── LOGIN ──
+// LOGIN
 document.getElementById('pw-input').addEventListener('keydown',e=>{if(e.key==='Enter')doLogin();});
 function doLogin(){
   if(document.getElementById('pw-input').value===ADMIN_PW){showScreen('screen-dashboard');checkExistingSession();}
   else document.getElementById('login-error').classList.add('show');
 }
 
-// ── SESSION ──
 async function checkExistingSession(){
   const data=await sb('sessions?select=code,current_q,state&order=created_at.desc&limit=1');
   if(data&&data.length>0&&data[0].state!=='finished'){
     sessionCode=data[0].code;currentQ=data[0].current_q;
     showSessionPanel();
     if(data[0].state==='waiting') startPollingWaiting();
-    else if(data[0].state==='question') resumeQuestion(data[0].current_q);
+    else if(data[0].state==='question') showQuestion(data[0].current_q);
   }
 }
 
 async function createSession(){
-  clearInterval(pollInt);clearInterval(timerInt);
+  clearInterval(pollInt);clearInterval(timerInt);clearInterval(lagInt);
   const code=genCode();
-  const res=await sb('sessions','POST',{code,current_q:-1,state:'waiting'});
+  const res=await sb('sessions','POST',{code,current_q:-1,state:'waiting',time_expired:false});
   if(!res) return alert('Erro ao criar sessão.');
   sessionCode=code;currentQ=-1;totalParticipants=0;
   showSessionPanel();
@@ -340,22 +362,19 @@ function showSessionPanel(){
   generateQR(sessionCode);
 }
 
-// ── QR CODE ──
 function generateQR(code){
   const el=document.getElementById('qr-code');
   el.innerHTML='';
   const url=`${SITE_URL}index.html?code=${code}`;
   document.getElementById('qr-label').textContent=url;
-  new QRCode(el,{text:url,width:140,height:140,colorDark:'#1e293b',colorLight:'#ffffff',correctLevel:QRCode.CorrectLevel.M});
+  new QRCode(el,{text:url,width:130,height:130,colorDark:'#1e293b',colorLight:'#ffffff',correctLevel:QRCode.CorrectLevel.M});
 }
 
-// ── WAITING ROOM ──
+// WAITING
 function startPollingWaiting(){
-  clearInterval(pollInt);
-  pollParticipants();
+  clearInterval(pollInt);pollParticipants();
   pollInt=setInterval(pollParticipants,3000);
 }
-
 async function pollParticipants(){
   const data=await sb(`participants?select=username&session_code=eq.${sessionCode}&order=joined_at.asc`);
   if(!data) return;
@@ -366,31 +385,20 @@ async function pollParticipants(){
   const existing=new Set([...grid.querySelectorAll('.participant-chip')].map(c=>c.textContent));
   data.forEach(p=>{
     if(!existing.has(p.username)){
-      const chip=document.createElement('div');
-      chip.className='participant-chip';chip.textContent=p.username;
-      grid.appendChild(chip);
+      const chip=document.createElement('div');chip.className='participant-chip';chip.textContent=p.username;grid.appendChild(chip);
     }
   });
 }
 
-// ── START QUIZ ──
 async function startQuiz(){
   clearInterval(pollInt);
   currentQ=0;
-  await sbPatch(`sessions?code=eq.${sessionCode}`,{current_q:0,state:'question'});
+  await sbPatch(`sessions?code=eq.${sessionCode}`,{current_q:0,state:'question',time_expired:false});
   showQuestion(0);
 }
 
-function resumeQuestion(qi){
-  currentQ=qi;
-  document.getElementById('waiting-panel').style.display='none';
-  document.getElementById('question-panel').style.display='block';
-  showQuestion(qi);
-}
-
-// ── QUESTION ──
 function showQuestion(qi){
-  timeExpired=false;
+  currentQ=qi;
   document.getElementById('waiting-panel').style.display='none';
   document.getElementById('question-panel').style.display='block';
   document.getElementById('finished-panel').style.display='none';
@@ -398,30 +406,27 @@ function showQuestion(qi){
 
   const q=QUESTIONS[qi];
   document.getElementById('admin-q-num').textContent=`Pergunta ${qi+1} / ${QUESTIONS.length}`;
-  document.getElementById('admin-q-tag').textContent=q.tag;
-  document.getElementById('admin-q-text').textContent=q.text;
+  const tagBadge=document.getElementById('admin-q-tag');
+  tagBadge.textContent=q.tag;
+  tagBadge.className='q-tag-badge '+(q.bonus?'bonus':'normal');
 
+  document.getElementById('admin-q-text').textContent=q.text;
   const hintEl=document.getElementById('admin-q-hint');
   if(q.hint){hintEl.textContent=q.hint;hintEl.style.display='block';}else hintEl.style.display='none';
   const ctxEl=document.getElementById('admin-q-context');
   if(q.context){ctxEl.textContent=q.context;ctxEl.style.display='block';}else ctxEl.style.display='none';
 
-  // Options WITHOUT correct highlight
+  // Options — no correct highlight yet
   const opts=document.getElementById('admin-options');
   opts.innerHTML='';
-  const letters=['A','B','C'];
-  q.options.forEach((o,i)=>{
+  ['A','B','C'].forEach((l,i)=>{
     const row=document.createElement('div');
-    row.className='opt-row';
-    row.id=`opt-row-${i}`;
-    row.innerHTML=`<div class="opt-letter">${letters[i]}</div><div class="opt-text">${o}</div><div class="opt-bar-wrap"><div class="opt-bar-bg"><div class="opt-bar-fill" id="opt-bar-${i}" style="width:0%"></div></div><div class="opt-count" id="opt-count-${i}">0</div></div>`;
+    row.className='opt-row';row.id=`opt-row-${i}`;
+    row.innerHTML=`<div class="opt-letter">${l}</div><div class="opt-text">${q.options[i]}</div><div class="opt-bar-wrap"><div class="opt-bar-bg"><div class="opt-bar-fill" id="opt-bar-${i}" style="width:0%"></div></div><div class="opt-count" id="opt-count-${i}">0</div></div>`;
     opts.appendChild(row);
   });
 
-  // Hide explanation
   document.getElementById('explanation-box').classList.remove('show');
-  document.getElementById('btn-next-q').disabled=true;
-  document.getElementById('next-hint').style.display='block';
   document.getElementById('answered-count').textContent='0';
   document.getElementById('answered-total').textContent=`/ ${totalParticipants}`;
   document.getElementById('answered-bar').style.width='0%';
@@ -434,40 +439,62 @@ function showQuestion(qi){
   startPollingAnswers(qi);
 }
 
+// ADMIN TIMER — single source of truth
 function startAdminTimer(seconds){
   clearInterval(timerInt);
   timeLeft=seconds;
   updateAdminTimer(seconds,seconds);
-  timerInt=setInterval(()=>{
+  timerInt=setInterval(async()=>{
     timeLeft--;
     updateAdminTimer(timeLeft,seconds);
-    if(timeLeft<=0){clearInterval(timerInt);onTimeExpired();}
+    if(timeLeft<=0){
+      clearInterval(timerInt);
+      // Signal participants time is up
+      await sbPatch(`sessions?code=eq.${sessionCode}`,{time_expired:true});
+      // 10s lag before revealing answer to admin
+      startLagCountdown();
+    }
   },1000);
 }
 
 function updateAdminTimer(left,total){
-  const pct=(left/total)*100;
+  const pct=Math.max(0,(left/total)*100);
   const el=document.getElementById('admin-timer');
   const bar=document.getElementById('admin-timer-bar');
-  const mins=Math.floor(left/60),secs=left%60;
-  el.textContent=mins>0?`${mins}:${String(secs).padStart(2,'0')}`:`${left}s`;
+  const mins=Math.floor(left/60),secs=Math.max(0,left%60);
+  el.textContent=mins>0?`${mins}:${String(secs).padStart(2,'0')}`:`${Math.max(0,left)}s`;
   bar.style.width=pct+'%';
   el.className='timer-big'+(pct<=20?' danger':pct<=40?' warning':'');
   bar.className='timer-bar'+(pct<=20?' danger':pct<=40?' warning':'');
 }
 
-function onTimeExpired(){
-  timeExpired=true;
+// 10 SECOND LAG before revealing answer
+function startLagCountdown(){
+  let lag=10;
+  const overlay=document.getElementById('lag-overlay');
+  const num=document.getElementById('lag-num');
+  overlay.classList.add('show');
+  num.textContent=lag;
+  clearInterval(lagInt);
+  lagInt=setInterval(()=>{
+    lag--;
+    num.textContent=lag;
+    if(lag<=0){
+      clearInterval(lagInt);
+      overlay.classList.remove('show');
+      revealAnswer();
+    }
+  },1000);
+}
+
+function revealAnswer(){
   const q=QUESTIONS[currentQ];
-  // Now reveal correct answer
   document.getElementById(`opt-row-${q.correct}`).classList.add('reveal-correct');
   document.getElementById('explanation-text').textContent=q.explanation;
   document.getElementById('explanation-box').classList.add('show');
-  document.getElementById('btn-next-q').disabled=false;
-  document.getElementById('next-hint').style.display='none';
 }
 
-// ── POLL ANSWERS ──
+// POLL ANSWERS
 function startPollingAnswers(qi){
   clearInterval(pollInt);
   pollAnswers(qi);
@@ -477,33 +504,24 @@ function startPollingAnswers(qi){
 async function pollAnswers(qi){
   const data=await sb(`participants?select=username,answers,score&session_code=eq.${sessionCode}&order=score.desc`);
   if(!data) return;
-
   const counts=[0,0,0];
-  let answered=0, ready=0;
+  let answered=0;
   data.forEach(p=>{
     const ans=JSON.parse(p.answers||'[]');
-    if(ans[qi]!==undefined&&ans[qi]!==null){answered++;ready++;if(ans[qi]>=0&&ans[qi]<=2)counts[ans[qi]]++;}
+    if(ans[qi]!==undefined&&ans[qi]!==null){answered++;if(ans[qi]>=0&&ans[qi]<=2)counts[ans[qi]]++;}
   });
-
   document.getElementById('answered-count').textContent=answered;
   document.getElementById('answered-total').textContent=`/ ${totalParticipants}`;
-  const apct=totalParticipants>0?(answered/totalParticipants)*100:0;
-  document.getElementById('answered-bar').style.width=apct+'%';
-
-  document.getElementById('ready-count').textContent=ready;
+  document.getElementById('answered-bar').style.width=(totalParticipants>0?(answered/totalParticipants)*100:0)+'%';
+  document.getElementById('ready-count').textContent=answered;
   document.getElementById('ready-total').textContent=`/ ${totalParticipants}`;
-  const rpct=totalParticipants>0?(ready/totalParticipants)*100:0;
-  document.getElementById('ready-bar').style.width=rpct+'%';
-
-  // Update bars (no correct highlight until time expires)
+  document.getElementById('ready-bar').style.width=(totalParticipants>0?(answered/totalParticipants)*100:0)+'%';
   counts.forEach((c,i)=>{
-    const countEl=document.getElementById(`opt-count-${i}`);
-    const barEl=document.getElementById(`opt-bar-${i}`);
-    if(countEl) countEl.textContent=c;
-    if(barEl) barEl.style.width=(answered>0?(c/answered)*100:0)+'%';
+    const ce=document.getElementById(`opt-count-${i}`);
+    const be=document.getElementById(`opt-bar-${i}`);
+    if(ce) ce.textContent=c;
+    if(be) be.style.width=(answered>0?(c/answered)*100:0)+'%';
   });
-
-  // Leaderboard (score only updates after lockAnswers on client side)
   updateLiveLeaderboard(data);
 }
 
@@ -511,46 +529,39 @@ function updateLiveLeaderboard(data){
   const sorted=[...data].sort((a,b)=>b.score-a.score);
   const medals=['🥇','🥈','🥉'];
   const lb=document.getElementById('admin-lb');
-  if(sorted.length===0){lb.innerHTML='<div class="lb-loading">A aguardar respostas...</div>';return;}
+  if(!sorted.length){lb.innerHTML='<div class="lb-loading">A aguardar respostas...</div>';return;}
   lb.innerHTML='';
   sorted.slice(0,10).forEach((p,i)=>{
-    const ans=JSON.parse(p.answers||'[]');
-    const responded=ans.filter(a=>a!==null&&a!==undefined).length;
-    const row=document.createElement('div');
-    row.className='lb-row';
-    row.innerHTML=`<div class="lb-rank">${i<3?medals[i]:i+1}</div><div class="lb-name">${p.username}</div><div style="text-align:right"><div class="lb-score">${p.score} pts</div><div class="lb-detail">${responded} respondidas</div></div>`;
+    const row=document.createElement('div');row.className='lb-row';
+    row.innerHTML=`<div class="lb-rank">${i<3?medals[i]:i+1}</div><div class="lb-name">${p.username}</div><div style="text-align:right"><div class="lb-score">${p.score} pts</div></div>`;
     lb.appendChild(row);
   });
 }
 
-// ── NEXT QUESTION ──
 async function nextQuestion(){
-  clearInterval(pollInt);clearInterval(timerInt);
+  clearInterval(pollInt);clearInterval(timerInt);clearInterval(lagInt);
+  document.getElementById('lag-overlay').classList.remove('show');
   currentQ++;
   if(currentQ>=QUESTIONS.length){
-    await sbPatch(`sessions?code=eq.${sessionCode}`,{current_q:99,state:'finished'});
+    await sbPatch(`sessions?code=eq.${sessionCode}`,{current_q:99,state:'finished',time_expired:false});
     showFinished();
   } else {
-    await sbPatch(`sessions?code=eq.${sessionCode}`,{current_q:currentQ,state:'question'});
+    await sbPatch(`sessions?code=eq.${sessionCode}`,{current_q:currentQ,state:'question',time_expired:false});
     showQuestion(currentQ);
   }
 }
 
-// ── FINISHED ──
 async function showFinished(){
   clearInterval(pollInt);clearInterval(timerInt);
   updateStatePill('finished');
   document.getElementById('question-panel').style.display='none';
-  document.getElementById('waiting-panel').style.display='none';
   document.getElementById('finished-panel').style.display='block';
-  const data=await sb(`participants?select=username,score,answers&session_code=eq.${sessionCode}&order=score.desc`);
+  const data=await sb(`participants?select=username,score&session_code=eq.${sessionCode}&order=score.desc`);
   if(!data) return;
   const medals=['🥇','🥈','🥉'];
-  const lb=document.getElementById('final-lb');
-  lb.innerHTML='';
+  const lb=document.getElementById('final-lb');lb.innerHTML='';
   data.forEach((p,i)=>{
-    const row=document.createElement('div');
-    row.className='lb-row';
+    const row=document.createElement('div');row.className='lb-row';
     row.innerHTML=`<div class="lb-rank">${i<3?medals[i]:i+1}</div><div class="lb-name">${p.username}</div><div class="lb-score">${p.score} pts</div>`;
     lb.appendChild(row);
   });

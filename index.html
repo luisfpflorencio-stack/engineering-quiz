@@ -11,6 +11,7 @@
     --accent-dark:#1d4ed8; --text:#1e293b; --text-muted:#64748b;
     --border:#e2e8f0; --green:#16a34a; --green-light:#f0fdf4;
     --red:#dc2626; --red-light:#fef2f2; --gold:#d97706; --gold-light:#fffbeb;
+    --purple:#7c3aed; --purple-light:#f5f3ff;
     --shadow:0 2px 12px rgba(0,0,0,0.08);
   }
   *{ box-sizing:border-box; margin:0; padding:0; }
@@ -20,6 +21,7 @@
   @keyframes up{ from{opacity:0;transform:translateY(12px)} to{opacity:1;transform:translateY(0)} }
   .card{ background:var(--surface); border-radius:16px; box-shadow:var(--shadow); padding:28px 24px; margin-bottom:16px; }
   .badge{ display:inline-block; background:var(--accent-light); color:var(--accent); font-size:11px; font-weight:700; letter-spacing:.1em; text-transform:uppercase; padding:4px 12px; border-radius:100px; margin-bottom:16px; }
+  .badge-bonus{ background:var(--purple-light); color:var(--purple); }
   label.field-label{ display:block; font-size:13px; font-weight:600; color:var(--text); margin-bottom:8px; }
   input[type="text"]{ width:100%; padding:14px 16px; border:1.5px solid var(--border); border-radius:12px; font-size:16px; font-family:'Inter',sans-serif; color:var(--text); background:var(--bg); outline:none; transition:border-color .2s; margin-bottom:12px; }
   input[type="text"]:focus{ border-color:var(--accent); background:#fff; }
@@ -50,9 +52,13 @@
   .timer-label.warning{ color:var(--gold); }
   .timer-label.danger{ color:var(--red); }
   .q-tag{ font-size:11px; font-weight:700; color:var(--accent); text-transform:uppercase; letter-spacing:.1em; margin-bottom:12px; }
+  .q-tag.bonus{ color:var(--purple); }
   .q-text{ font-size:18px; font-weight:700; line-height:1.4; color:var(--text); margin-bottom:8px; }
   .q-hint{ font-size:22px; font-weight:800; color:var(--accent); letter-spacing:.15em; margin-bottom:20px; padding:16px; background:var(--accent-light); border-radius:10px; text-align:center; display:none; }
   .q-context{ font-size:13px; color:var(--text-muted); line-height:1.5; margin-bottom:20px; padding:12px 14px; background:var(--bg); border-radius:10px; border-left:3px solid var(--accent); display:none; }
+  .bonus-banner{ background:var(--purple-light); border:1.5px solid var(--purple); border-radius:12px; padding:12px 16px; margin-bottom:16px; text-align:center; display:none; }
+  .bonus-banner.show{ display:block; }
+  .bonus-banner-text{ font-size:13px; font-weight:700; color:var(--purple); }
   .options{ display:flex; flex-direction:column; gap:10px; margin-top:4px; }
   .option-btn{ display:flex; align-items:center; gap:14px; padding:16px; background:var(--bg); border:1.5px solid var(--border); border-radius:12px; cursor:pointer; text-align:left; font-family:'Inter',sans-serif; font-size:15px; font-weight:500; color:var(--text); transition:all .15s; width:100%; line-height:1.4; }
   .option-btn:hover:not(.locked){ border-color:var(--accent); background:var(--accent-light); color:var(--accent-dark); }
@@ -71,7 +77,6 @@
   .status-bar.timeout{ background:var(--red-light); border-left:3px solid var(--red); color:var(--red); }
   .status-bar.correct-end{ background:var(--green-light); border-left:3px solid var(--green); color:var(--green); }
   .status-bar.wrong-end{ background:var(--red-light); border-left:3px solid var(--red); color:var(--red); }
-  .status-bar.waiting{ background:var(--gold-light); border-left:3px solid var(--gold); color:var(--gold); }
   #screen-results{ padding-top:24px; }
   .result-hero{ text-align:center; padding:32px 24px; }
   .result-emoji{ font-size:56px; margin-bottom:16px; }
@@ -85,6 +90,7 @@
   .badge-correct{ background:var(--green-light); color:var(--green); }
   .badge-wrong{ background:var(--red-light); color:var(--red); }
   .badge-timeout{ background:var(--gold-light); color:var(--gold); }
+  .badge-bonus-correct{ background:var(--purple-light); color:var(--purple); }
 </style>
 </head>
 <body>
@@ -116,13 +122,16 @@
 <!-- QUIZ -->
 <div id="screen-quiz" class="screen">
   <div class="quiz-header">
-    <div class="q-counter" id="q-counter">Pergunta 1 / 8</div>
+    <div class="q-counter" id="q-counter">Pergunta 1 / 12</div>
     <div class="username-pill" id="user-pill">—</div>
   </div>
   <div class="card">
     <div class="timer-wrap">
-      <div class="timer-bar-bg"><div class="timer-bar" id="timer-bar"></div></div>
-      <div class="timer-label" id="timer-label">60s</div>
+      <div class="timer-bar-bg"><div class="timer-bar" id="timer-bar" style="width:100%"></div></div>
+      <div class="timer-label" id="timer-label">—</div>
+    </div>
+    <div class="bonus-banner" id="bonus-banner">
+      <div class="bonus-banner-text">⭐ Pergunta Bónus — vale 2 pontos!</div>
     </div>
     <div class="q-tag" id="q-tag"></div>
     <div class="q-text" id="q-text"></div>
@@ -138,8 +147,8 @@
   <div class="card result-hero">
     <div class="result-emoji" id="result-emoji">🎉</div>
     <div class="result-name" id="result-name"></div>
-    <div class="result-score" id="result-score">0/8</div>
-    <div class="result-label">respostas correctas</div>
+    <div class="result-score" id="result-score">0/14</div>
+    <div class="result-label">pontos (máx. 14)</div>
   </div>
   <div class="card">
     <div style="font-size:13px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:14px">Resumo</div>
@@ -152,19 +161,25 @@ const SUPABASE_URL = 'https://ijwgivgtpbonferzayju.supabase.co';
 const SUPABASE_KEY = 'sb_publishable_6dFS89RL1DywcIH9_9BUPA_GhhgmKKl';
 
 const QUESTIONS = [
-  { tag:'🔤 Código',          text:'Qual é a palavra escondida nesta sequência de números?',                                                                                                         hint:'3  ·  1  ·  6  ·  5',              context:null,                                                                         options:['a) café','b) casa','c) copo'],                                                                                                                                                                                                  correct:0, time:45,  explanation:'Cada número é a posição da letra no alfabeto: 3=C, 1=A, 6=F, 5=E → CAFE → café ☕' },
-  { tag:'🔢 Sequências',      text:'Qual é o número que falta?',                                                                                                                                    hint:'1  ·  2  ·  6  ·  24  ·  120  ·  ___', context:null,                                                                      options:['a) 360','b) 720','c) 600'],                                                                                                                                                                                                     correct:1, time:60,  explanation:'É a sequência de fatoriais: 1!=1, 2!=2, 3!=6, 4!=24, 5!=120, 6!=720.' },
-  { tag:'⚙️ Engenharia',      text:'Uma bomba enche um tanque em 6h. Outra esvazia-o em 4h. Se ambas estiverem ligadas ao mesmo tempo, o que acontece?',                                            hint:null,                                context:'Assume que o tanque começa cheio.',                                           options:['a) Enche em 12h','b) Esvazia em 12h','c) Equilibram-se — nada acontece'],                                                                                                                                                       correct:1, time:60,  explanation:'Taxa de enchimento: 1/6 /h. Esvaziamento: 1/4 /h. Como 1/4 > 1/6, esvazia. Taxa líquida: 1/4−1/6=1/12 /h → esvazia em 12h.' },
-  { tag:'🧊 Espacial',        text:'Quantas faces tem um cubo se lhe cortares exactamente um vértice (um canto)?',                                                                                  hint:null,                                context:null,                                                                         options:['a) 6 faces','b) 7 faces','c) 8 faces'],                                                                                                                                                                                        correct:1, time:60,  explanation:'O corte cria uma nova face triangular sem remover nenhuma das 6 existentes. Total: 7 faces.' },
-  { tag:'⚡ Física',           text:'Uma ponte aguenta 10 toneladas. Um camião de 9,9t para em cima dela e um pássaro pousa no capô. A ponte colapsa. Porquê?',                                     hint:null,                                context:null,                                                                         options:['a) O pássaro foi a gota de água','b) O travão gerou força dinâmica > 10t','c) A ponte já estava danificada'],                                                                                                                    correct:1, time:60,  explanation:'Ao travar, o camião aplicou força dinâmica (F=m×a) muito superior à carga estática. Erro clássico: confundir carga estática com dinâmica.' },
-  { tag:'🧠 Lógica',          text:'Tens dois fios irregulares — cada um demora exactamente 1 hora a queimar. Sem relógio, como medes exactamente 45 minutos?',                                    hint:null,                                context:'Os fios não queimam de forma uniforme, não podes medir pelo comprimento.',   options:['a) Queimas metade de cada fio','b) Acendes o fio 1 dos dois extremos + fio 2 de uma ponta. Quando o fio 1 acabar, acendes o outro extremo do fio 2','c) É impossível sem relógio'],                                            correct:1, time:60,  explanation:'Fio 1 dos dois extremos → acaba em 30 min. Fio 2 tem 30 min restantes → acender outro extremo → mais 15 min. Total: 45 min ✅' },
-  { tag:'⚖️ Combinatória',    text:'Tens 12 bolas visualmente idênticas. Uma é diferente — pode ser mais pesada OU mais leve. Com uma balança de pratos (sem pesos), qual o mínimo de pesagens?', hint:null,                                context:null,                                                                         options:['a) 2 pesagens','b) 3 pesagens','c) 4 pesagens'],                                                                                                                                                                               correct:1, time:60,  explanation:'3 pesagens são suficientes. 1ª: 4 vs 4. Se equilibrar → diferente nas 4 restantes. As pesagens seguintes isolam a bola e determinam se é mais pesada ou leve.' },
-  { tag:'🦠 Contraintuitivo', text:'Uma bactéria duplica a cada minuto. Às 12:00 há 1 bactéria. Às 13:00 o frasco está completamente cheio. A que horas estava o frasco exactamente a metade?',  hint:null,                                context:null,                                                                         options:['a) 12:30','b) 12:59','c) 12:50'],                                                                                                                                                                                               correct:1, time:180, explanation:'Se às 13:00 está cheio e duplica a cada minuto, um minuto antes (12:59) estava a metade. Crescimento exponencial ≠ crescimento linear.' }
+  { tag:'🔤 Código',          bonus:false, text:'Qual é a palavra escondida nesta sequência de números?',                                                                                                         hint:'3  ·  1  ·  6  ·  5',              context:null,                                                                         options:['a) café','b) casa','c) copo'],                                                                                                                                                                                                  correct:0, time:45,  explanation:'Cada número é a posição da letra no alfabeto: 3=C, 1=A, 6=F, 5=E → CAFE → café ☕' },
+  { tag:'🔢 Sequências',      bonus:false, text:'Qual é o número que falta?',                                                                                                                                    hint:'1  ·  2  ·  6  ·  24  ·  120  ·  ___', context:null,                                                                      options:['a) 360','b) 720','c) 600'],                                                                                                                                                                                                     correct:1, time:60,  explanation:'É a sequência de fatoriais: 1!=1, 2!=2, 3!=6, 4!=24, 5!=120, 6!=720.' },
+  { tag:'⚙️ Engenharia',      bonus:false, text:'Uma bomba enche um tanque em 6h. Outra esvazia-o em 4h. Se ambas estiverem ligadas ao mesmo tempo, o que acontece?',                                            hint:null,                                context:'Assume que o tanque começa cheio.',                                           options:['a) Enche em 12h','b) Esvazia em 12h','c) Ficam em equilíbrio indefinidamente'],                                                                                                                                                 correct:1, time:60,  explanation:'Taxa de enchimento: 1/6 /h. Esvaziamento: 1/4 /h. Como 1/4 > 1/6, esvazia. Taxa líquida: 1/4−1/6=1/12 /h → esvazia em 12h.' },
+  { tag:'🧊 Espacial',        bonus:false, text:'Quantas faces tem um cubo se lhe cortares exactamente um vértice (um canto)?',                                                                                  hint:null,                                context:null,                                                                         options:['a) 6 faces','b) 7 faces','c) 8 faces'],                                                                                                                                                                                        correct:1, time:60,  explanation:'O corte cria uma nova face triangular sem remover nenhuma das 6 existentes. Total: 7 faces.' },
+  { tag:'⚡ Física',           bonus:false, text:'Um homem está dentro de um elevador a cair em queda livre e coloca-se em cima de uma balança. O que marca a balança durante a queda?',                          hint:null,                                context:null,                                                                         options:['a) O peso normal do homem','b) Zero — o homem fica em imponderabilidade','c) O dobro do peso — o impacto da queda'],                                                                                                            correct:1, time:60,  explanation:'Em queda livre, tanto o homem como a balança aceleram à mesma taxa (g). Não há força normal entre eles — a balança marca zero. É o mesmo princípio da imponderabilidade nos astronautas.' },
+  { tag:'🧠 Lógica',          bonus:false, text:'Tens dois fios irregulares — cada um demora exactamente 1 hora a queimar. Sem relógio, como medes exactamente 45 minutos?',                                    hint:null,                                context:'Os fios não queimam de forma uniforme — não podes medir pelo comprimento.',  options:['a) Divides cada fio a meio e queimas as metades em sequência','b) Acendes um fio pelos dois extremos ao mesmo tempo que acendes o outro só por um. Quando o primeiro acabar, acendes o segundo extremo do outro fio','c) Queimas os dois em simultâneo pelos mesmos extremos e estimas visualmente'],                 correct:1, time:60,  explanation:'Fio 1 dos dois extremos → acaba em 30 min. Fio 2 tem 30 min restantes → acender outro extremo → mais 15 min. Total: 45 min ✅' },
+  { tag:'⚖️ Combinatória',    bonus:false, text:'Tens 12 bolas visualmente idênticas. Uma é diferente — pode ser mais pesada OU mais leve. Com uma balança de pratos (sem pesos), qual o mínimo de pesagens para identificar a bola E saber se é mais pesada ou mais leve?', hint:null, context:null, options:['a) 2 pesagens','b) 3 pesagens','c) 4 pesagens'], correct:1, time:60, explanation:'3 pesagens são suficientes. 1ª: 4 vs 4. Se equilibrar → diferente nas 4 restantes. As pesagens seguintes isolam a bola e determinam se é mais pesada ou leve.' },
+  { tag:'🎲 Probabilidade',   bonus:false, text:'Numa sala com 30 pessoas, qual é a probabilidade aproximada de pelo menos duas fazerem anos no mesmo dia?',                                                      hint:null,                                context:null,                                                                         options:['a) Cerca de 30%','b) Cerca de 70%','c) Cerca de 50%'],                                                                                                                                                                         correct:1, time:60,  explanation:'É o famoso "Problema do Aniversário". Com 30 pessoas, a probabilidade é ~70.6%. A intuição diz que precisamos de 183 pessoas para ter 50%, mas na realidade bastam 23! O cálculo é: 1 − (365!/((365−n)! × 365^n)).' },
+  { tag:'🔢 Matemática',      bonus:false, text:'Quantos zeros tem o número 100! (fatorial de 100) no final?',                                                                                                   hint:null,                                context:'100! = 1 × 2 × 3 × ... × 100',                                               options:['a) 20 zeros','b) 24 zeros','c) 10 zeros'],                                                                                                                                                                                     correct:1, time:60,  explanation:'Cada zero final vem de um factor 10 = 2×5. Contamos os múltiplos de 5 em 100!: ⌊100/5⌋ + ⌊100/25⌋ = 20 + 4 = 24 zeros.' },
+  { tag:'🍺 Bónus — Física',  bonus:true,  text:'A que temperatura (em °C) a água congela a uma pressão de 3 atmosferas — semelhante à pressão típica num barril de cerveja pressurizado?',                     hint:null,                                context:'A pressão afecta o ponto de congelação da água.',                             options:['a) −0.02°C','b) 0°C','c) −5°C'],                                                                                                                                                                                               correct:0, time:60,  explanation:'A água tem a propriedade única de ter o ponto de fusão ligeiramente reduzido com o aumento de pressão (ao contrário da maioria das substâncias). A 3 atm, congela a aproximadamente −0.02°C — quase 0, mas não exactamente!' },
+  { tag:'🍺 Bónus — História', bonus:true, text:'Qual foi a primeira civilização conhecida a produzir cerveja em grande escala e a incluí-la como pagamento de salários?',                                       hint:null,                                context:null,                                                                         options:['a) Egípcios','b) Sumérios','c) Romanos'],                                                                                                                                                                                       correct:1, time:60,  explanation:'Os Sumérios (Mesopotâmia, ~4000 a.C.) foram os primeiros a produzir cerveja em grande escala. Trabalhadores recebiam rações diárias de cerveja como parte do salário. Existem tabletas cuneiformes com receitas de cerveja datadas de ~1800 a.C.' },
+  { tag:'🍺 Bónus — Química', bonus:true,  text:'Qual é o nome do processo biológico que transforma açúcares em álcool etílico e CO₂ na produção de cerveja?',                                                  hint:null,                                context:null,                                                                         options:['a) Destilação','b) Oxidação','c) Fermentação'],                                                                                                                                                                                 correct:2, time:60,  explanation:'A fermentação alcoólica é realizada por leveduras (Saccharomyces cerevisiae) que convertem glucose em etanol e CO₂. É este processo que cria o álcool e parte da carbonatação da cerveja.' },
 ];
+
+const MAX_SCORE = QUESTIONS.reduce((s,q)=>s+(q.bonus?2:1),0); // 9 + 6 = 15... actually 9×1 + 3×2 = 15
 
 let username='', sessionCode='', participantId=null, currentQ=-1;
 let selectedOpt=null, timeLocked=false, localAnswers=[];
-let timerInt=null, pollInt=null, timeLeft=0;
+let timerInt=null, pollInt=null, timeLeft=0, currentQTime=60;
 
 async function sb(path,method='GET',body=null){
   const opts={method,headers:{'Content-Type':'application/json','apikey':SUPABASE_KEY,'Authorization':`Bearer ${SUPABASE_KEY}`,'Prefer':method==='POST'?'return=representation':''}};
@@ -187,8 +202,6 @@ function checkInputs(){
 document.getElementById('username-input').addEventListener('input',checkInputs);
 document.getElementById('code-input').addEventListener('input',function(){this.value=this.value.toUpperCase();checkInputs();});
 document.getElementById('code-input').addEventListener('keydown',e=>{if(e.key==='Enter')joinSession();});
-
-// Check URL params for pre-filled code
 window.addEventListener('load',()=>{
   const params=new URLSearchParams(window.location.search);
   const code=params.get('code');
@@ -198,7 +211,7 @@ window.addEventListener('load',()=>{
 async function joinSession(){
   username=document.getElementById('username-input').value.trim();
   sessionCode=document.getElementById('code-input').value.trim().toUpperCase();
-  const sessions=await sb(`sessions?code=eq.${sessionCode}&select=code,current_q,state`);
+  const sessions=await sb(`sessions?code=eq.${sessionCode}&select=code,current_q,state,time_expired`);
   if(!sessions||sessions.length===0){document.getElementById('join-error').classList.add('show');return;}
   document.getElementById('join-error').classList.remove('show');
   const existing=await sb(`participants?session_code=eq.${sessionCode}&username=eq.${encodeURIComponent(username)}&select=id,answers`);
@@ -217,17 +230,19 @@ async function joinSession(){
   startPollingSession(sessions[0]);
 }
 
+// SESSION POLLING — drives everything
 function startPollingSession(initial){
   handleSessionState(initial);
   clearInterval(pollInt);
   pollInt=setInterval(async()=>{
-    const data=await sb(`sessions?code=eq.${sessionCode}&select=current_q,state`);
+    const data=await sb(`sessions?code=eq.${sessionCode}&select=current_q,state,time_expired`);
     if(data&&data.length>0) handleSessionState(data[0]);
   },2000);
 }
 
 function handleSessionState(session){
   if(session.state==='finished'){clearInterval(pollInt);clearInterval(timerInt);showResults();return;}
+  // New question
   if(session.state==='question'&&session.current_q!==currentQ){
     currentQ=session.current_q;
     selectedOpt=null;
@@ -235,18 +250,32 @@ function handleSessionState(session){
     clearInterval(timerInt);
     showQuestion(currentQ);
   }
+  // Time expired signal from admin
+  if(session.time_expired&&!timeLocked&&currentQ>=0){
+    clearInterval(timerInt);
+    lockAnswers();
+  }
 }
 
 function showQuestion(qi){
   showScreen('screen-quiz');
   const q=QUESTIONS[qi];
+  currentQTime=q.time;
   document.getElementById('q-counter').textContent=`Pergunta ${qi+1} / ${QUESTIONS.length}`;
-  document.getElementById('q-tag').textContent=q.tag;
+
+  const tagEl=document.getElementById('q-tag');
+  tagEl.textContent=q.tag;
+  tagEl.className='q-tag'+(q.bonus?' bonus':'');
+
+  const bonusBanner=document.getElementById('bonus-banner');
+  bonusBanner.className='bonus-banner'+(q.bonus?' show':'');
+
   document.getElementById('q-text').textContent=q.text;
   const hintEl=document.getElementById('q-hint');
   if(q.hint){hintEl.textContent=q.hint;hintEl.style.display='block';}else hintEl.style.display='none';
   const ctxEl=document.getElementById('q-context');
   if(q.context){ctxEl.textContent=q.context;ctxEl.style.display='block';}else ctxEl.style.display='none';
+
   const container=document.getElementById('options-container');
   container.innerHTML='';
   ['A','B','C'].forEach((letter,i)=>{
@@ -257,8 +286,10 @@ function showQuestion(qi){
     btn.onclick=()=>selectOption(i);
     container.appendChild(btn);
   });
+
   setStatus('');
-  startTimer(q.time);
+  // Start local timer (display only — locking is driven by admin signal)
+  startDisplayTimer(q.time);
 }
 
 async function selectOption(idx){
@@ -268,65 +299,85 @@ async function selectOption(idx){
   selectedOpt=idx;
   while(localAnswers.length<=currentQ) localAnswers.push(null);
   localAnswers[currentQ]=idx;
-  // Save tentative answer — score NOT updated yet
   await sbPatch(`participants?id=eq.${participantId}`,{answers:JSON.stringify(localAnswers)});
   setStatus('✓ Resposta guardada — podes mudar até o tempo acabar','saved');
 }
 
-function startTimer(seconds){
+// Display-only timer — actual lock comes from admin signal
+function startDisplayTimer(seconds){
   clearInterval(timerInt);
   timeLeft=seconds;
   updateTimer(seconds,seconds);
   timerInt=setInterval(()=>{
     timeLeft--;
     updateTimer(timeLeft,seconds);
-    if(timeLeft<=0){clearInterval(timerInt);lockAnswers();}
+    if(timeLeft<=0) clearInterval(timerInt); // just stop display, don't lock
   },1000);
 }
 
 function updateTimer(left,total){
-  const pct=(left/total)*100;
+  const pct=Math.max(0,(left/total)*100);
   const bar=document.getElementById('timer-bar');
   const lbl=document.getElementById('timer-label');
   bar.style.width=pct+'%';
-  const mins=Math.floor(left/60),secs=left%60;
-  lbl.textContent=mins>0?`${mins}:${String(secs).padStart(2,'0')}`:`${left}s`;
+  const mins=Math.floor(left/60),secs=Math.max(0,left%60);
+  lbl.textContent=mins>0?`${mins}:${String(secs).padStart(2,'0')}`:`${Math.max(0,left)}s`;
   bar.className='timer-bar'+(pct<=20?' danger':pct<=40?' warning':'');
   lbl.className='timer-label'+(pct<=20?' danger':pct<=40?' warning':'');
 }
 
 async function lockAnswers(){
+  if(timeLocked) return;
   timeLocked=true;
+  clearInterval(timerInt);
+  // Set timer display to 0
+  document.getElementById('timer-bar').style.width='0%';
+  document.getElementById('timer-bar').className='timer-bar danger';
+  document.getElementById('timer-label').textContent='0s';
+  document.getElementById('timer-label').className='timer-label danger';
+
   const q=QUESTIONS[currentQ];
   document.querySelectorAll('.option-btn').forEach((btn,i)=>{
     btn.classList.add('locked');
     btn.classList.remove('selected');
     if(selectedOpt!==null&&i===selectedOpt) btn.classList.add(selectedOpt===q.correct?'correct':'wrong');
   });
+
   while(localAnswers.length<=currentQ) localAnswers.push(null);
   if(selectedOpt===null) localAnswers[currentQ]=null;
-  const newScore=localAnswers.filter((a,i)=>a!==null&&a===QUESTIONS[i]?.correct).length;
+
+  const newScore=localAnswers.reduce((s,a,i)=>{
+    if(a===null||a===undefined) return s;
+    if(a===QUESTIONS[i]?.correct) return s+(QUESTIONS[i].bonus?2:1);
+    return s;
+  },0);
+
   await sbPatch(`participants?id=eq.${participantId}`,{answers:JSON.stringify(localAnswers),score:newScore});
+
   if(selectedOpt===null) setStatus('⏰ Tempo esgotado! Não respondeste a esta pergunta.','timeout');
-  else if(selectedOpt===q.correct) setStatus('✅ Correcto! Aguarda a próxima pergunta...','correct-end');
+  else if(selectedOpt===q.correct) setStatus(q.bonus?'⭐ Correcto! +2 pontos bónus!':'✅ Correcto! Aguarda a próxima pergunta...','correct-end');
   else setStatus('❌ Resposta errada. Aguarda a próxima pergunta...','wrong-end');
 }
 
 function setStatus(msg,type=''){
   const el=document.getElementById('status-bar');
-  if(!msg){el.classList.remove('show','saved','timeout','correct-end','wrong-end','waiting');return;}
+  if(!msg){el.classList.remove('show','saved','timeout','correct-end','wrong-end');return;}
   el.textContent=msg;
   el.className='status-bar show'+(type?` ${type}`:'');
 }
 
 function showResults(){
   clearInterval(pollInt);clearInterval(timerInt);
-  const correct=localAnswers.filter((a,i)=>a!==null&&a===QUESTIONS[i]?.correct).length;
-  const total=QUESTIONS.length;
-  const emoji=correct>=7?'🧠':correct>=5?'💪':correct>=3?'😅':'💀';
+  const score=localAnswers.reduce((s,a,i)=>{
+    if(a===null||a===undefined) return s;
+    if(a===QUESTIONS[i]?.correct) return s+(QUESTIONS[i].bonus?2:1);
+    return s;
+  },0);
+  const maxScore=QUESTIONS.reduce((s,q)=>s+(q.bonus?2:1),0);
+  const emoji=score>=maxScore*0.8?'🧠':score>=maxScore*0.6?'💪':score>=maxScore*0.4?'😅':'💀';
   document.getElementById('result-emoji').textContent=emoji;
   document.getElementById('result-name').textContent=username;
-  document.getElementById('result-score').textContent=`${correct}/${total}`;
+  document.getElementById('result-score').textContent=`${score}/${maxScore}`;
   const bd=document.getElementById('result-breakdown');
   bd.innerHTML='';
   localAnswers.forEach((a,i)=>{
@@ -335,7 +386,7 @@ function showResults(){
     row.className='breakdown-row';
     let cls,txt;
     if(a===null||a===undefined){cls='badge-timeout';txt='⏰ Sem resposta';}
-    else if(a===q.correct){cls='badge-correct';txt='✓ Certo';}
+    else if(a===q.correct){cls=q.bonus?'badge-bonus-correct':'badge-correct';txt=q.bonus?'⭐ +2 pts':'✓ Certo';}
     else{cls='badge-wrong';txt='✗ Errado';}
     row.innerHTML=`<span class="breakdown-q">${i+1}. ${q.tag}</span><span class="breakdown-badge ${cls}">${txt}</span>`;
     bd.appendChild(row);
