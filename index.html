@@ -18,35 +18,29 @@
   .screen{ display:none; width:100%; max-width:480px; }
   .screen.active{ display:block; animation:up .3s ease; }
   @keyframes up{ from{opacity:0;transform:translateY(12px)} to{opacity:1;transform:translateY(0)} }
-
   .card{ background:var(--surface); border-radius:16px; box-shadow:var(--shadow); padding:28px 24px; margin-bottom:16px; }
-
   .badge{ display:inline-block; background:var(--accent-light); color:var(--accent); font-size:11px; font-weight:700; letter-spacing:.1em; text-transform:uppercase; padding:4px 12px; border-radius:100px; margin-bottom:16px; }
-
   label.field-label{ display:block; font-size:13px; font-weight:600; color:var(--text); margin-bottom:8px; }
   input[type="text"]{ width:100%; padding:14px 16px; border:1.5px solid var(--border); border-radius:12px; font-size:16px; font-family:'Inter',sans-serif; color:var(--text); background:var(--bg); outline:none; transition:border-color .2s; margin-bottom:12px; }
   input[type="text"]:focus{ border-color:var(--accent); background:#fff; }
   input[type="text"]::placeholder{ color:#b0bec5; }
   input.code-input{ text-transform:uppercase; letter-spacing:.2em; font-size:22px; font-weight:800; text-align:center; }
-
   .btn{ display:block; width:100%; padding:16px; border:none; border-radius:12px; font-size:16px; font-weight:700; cursor:pointer; transition:all .15s; font-family:'Inter',sans-serif; }
   .btn-primary{ background:var(--accent); color:#fff; }
   .btn-primary:hover{ background:var(--accent-dark); }
   .btn-primary:active{ transform:scale(.98); }
   .btn-primary:disabled{ background:var(--border); color:var(--text-muted); cursor:not-allowed; }
-
   .error-msg{ background:var(--red-light); color:var(--red); border-radius:10px; padding:12px 16px; font-size:14px; font-weight:600; margin-bottom:12px; display:none; }
   .error-msg.show{ display:block; }
-
-  /* Waiting */
   .waiting-card{ text-align:center; padding:40px 24px; }
   .pulse{ font-size:48px; animation:pulse 2s infinite; display:block; margin-bottom:16px; }
   @keyframes pulse{ 0%,100%{transform:scale(1)} 50%{transform:scale(1.1)} }
   .waiting-title{ font-size:20px; font-weight:700; margin-bottom:8px; }
-  .waiting-sub{ font-size:14px; color:var(--text-muted); line-height:1.5; }
+  .waiting-sub{ font-size:14px; color:var(--text-muted); line-height:1.6; }
   .username-display{ font-weight:800; color:var(--accent); }
-
-  /* Timer */
+  .quiz-header{ display:flex; align-items:center; justify-content:space-between; margin-bottom:16px; }
+  .q-counter{ font-size:12px; font-weight:700; color:var(--text-muted); text-transform:uppercase; letter-spacing:.08em; }
+  .username-pill{ font-size:12px; font-weight:600; color:var(--accent); background:var(--accent-light); padding:4px 12px; border-radius:100px; max-width:160px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
   .timer-wrap{ margin-bottom:20px; }
   .timer-bar-bg{ width:100%; height:6px; background:var(--border); border-radius:100px; overflow:hidden; margin-bottom:8px; }
   .timer-bar{ height:100%; border-radius:100px; background:var(--accent); transition:width 1s linear, background .5s; }
@@ -55,41 +49,29 @@
   .timer-label{ text-align:right; font-size:13px; font-weight:700; color:var(--text-muted); font-variant-numeric:tabular-nums; }
   .timer-label.warning{ color:var(--gold); }
   .timer-label.danger{ color:var(--red); }
-
-  /* Quiz */
-  .quiz-header{ display:flex; align-items:center; justify-content:space-between; margin-bottom:16px; }
-  .q-counter{ font-size:12px; font-weight:700; color:var(--text-muted); text-transform:uppercase; letter-spacing:.08em; }
-  .username-pill{ font-size:12px; font-weight:600; color:var(--accent); background:var(--accent-light); padding:4px 12px; border-radius:100px; }
-
   .q-tag{ font-size:11px; font-weight:700; color:var(--accent); text-transform:uppercase; letter-spacing:.1em; margin-bottom:12px; }
   .q-text{ font-size:18px; font-weight:700; line-height:1.4; color:var(--text); margin-bottom:8px; }
   .q-hint{ font-size:22px; font-weight:800; color:var(--accent); letter-spacing:.15em; margin-bottom:20px; padding:16px; background:var(--accent-light); border-radius:10px; text-align:center; display:none; }
   .q-context{ font-size:13px; color:var(--text-muted); line-height:1.5; margin-bottom:20px; padding:12px 14px; background:var(--bg); border-radius:10px; border-left:3px solid var(--accent); display:none; }
-
-  .options{ display:flex; flex-direction:column; gap:10px; }
+  .options{ display:flex; flex-direction:column; gap:10px; margin-top:4px; }
   .option-btn{ display:flex; align-items:center; gap:14px; padding:16px; background:var(--bg); border:1.5px solid var(--border); border-radius:12px; cursor:pointer; text-align:left; font-family:'Inter',sans-serif; font-size:15px; font-weight:500; color:var(--text); transition:all .15s; width:100%; line-height:1.4; }
-  .option-btn:hover:not(:disabled){ border-color:var(--accent); background:var(--accent-light); color:var(--accent-dark); }
+  .option-btn:hover:not(.locked){ border-color:var(--accent); background:var(--accent-light); color:var(--accent-dark); }
+  .option-btn:hover:not(.locked) .letter{ background:var(--accent); border-color:var(--accent); color:#fff; }
   .option-btn .letter{ width:32px; height:32px; border-radius:8px; background:var(--surface); border:1.5px solid var(--border); display:flex; align-items:center; justify-content:center; font-size:13px; font-weight:700; flex-shrink:0; color:var(--text-muted); transition:all .15s; }
-  .option-btn:hover:not(:disabled) .letter{ background:var(--accent); border-color:var(--accent); color:#fff; }
+  .option-btn.selected{ border-color:var(--accent); background:var(--accent-light); color:var(--accent-dark); }
+  .option-btn.selected .letter{ background:var(--accent); border-color:var(--accent); color:#fff; }
   .option-btn.correct{ border-color:var(--green); background:var(--green-light); color:var(--green); }
   .option-btn.correct .letter{ background:var(--green); border-color:var(--green); color:#fff; }
   .option-btn.wrong{ border-color:var(--red); background:var(--red-light); color:var(--red); }
   .option-btn.wrong .letter{ background:var(--red); border-color:var(--red); color:#fff; }
-  .option-btn.reveal{ border-color:var(--green); background:var(--green-light); color:var(--green); opacity:.75; }
-  .option-btn.reveal .letter{ background:var(--green); border-color:var(--green); color:#fff; }
-  .option-btn:disabled{ cursor:not-allowed; }
-
-  .feedback-box{ display:none; margin-top:16px; padding:14px 16px; border-radius:12px; font-size:14px; line-height:1.5; }
-  .feedback-box.show{ display:block; animation:up .3s ease; }
-  .feedback-box.timeout{ background:var(--red-light); border-left:3px solid var(--red); color:var(--red); font-weight:600; }
-  .feedback-box.explanation{ background:var(--accent-light); border-left:3px solid var(--accent); color:var(--text); }
-  .feedback-title{ font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:.1em; margin-bottom:6px; color:var(--accent); }
-
-  /* Waiting for next */
-  .next-wait{ display:none; margin-top:16px; padding:14px 16px; background:var(--gold-light); border-radius:12px; border-left:3px solid var(--gold); font-size:14px; color:var(--gold); font-weight:600; }
-  .next-wait.show{ display:block; }
-
-  /* Results */
+  .option-btn.locked{ cursor:not-allowed; }
+  .status-bar{ margin-top:16px; padding:12px 14px; border-radius:10px; font-size:13px; font-weight:600; display:none; }
+  .status-bar.show{ display:block; animation:up .3s ease; }
+  .status-bar.saved{ background:var(--accent-light); border-left:3px solid var(--accent); color:var(--accent-dark); }
+  .status-bar.timeout{ background:var(--red-light); border-left:3px solid var(--red); color:var(--red); }
+  .status-bar.correct-end{ background:var(--green-light); border-left:3px solid var(--green); color:var(--green); }
+  .status-bar.wrong-end{ background:var(--red-light); border-left:3px solid var(--red); color:var(--red); }
+  .status-bar.waiting{ background:var(--gold-light); border-left:3px solid var(--gold); color:var(--gold); }
   #screen-results{ padding-top:24px; }
   .result-hero{ text-align:center; padding:32px 24px; }
   .result-emoji{ font-size:56px; margin-bottom:16px; }
@@ -127,7 +109,7 @@
   <div class="card waiting-card">
     <span class="pulse">⏳</span>
     <div class="waiting-title">Aguarda o início!</div>
-    <p class="waiting-sub">Olá, <span class="username-display" id="waiting-name"></span>!<br>O admin vai iniciar o quiz em breve.</p>
+    <p class="waiting-sub">Olá, <span class="username-display" id="waiting-name"></span>!<br><br>O admin vai iniciar o quiz em breve. Mantém este ecrã aberto.</p>
   </div>
 </div>
 
@@ -147,12 +129,7 @@
     <div class="q-hint" id="q-hint"></div>
     <div class="q-context" id="q-context"></div>
     <div class="options" id="options-container"></div>
-    <div class="feedback-box timeout" id="timeout-msg">⏰ Tempo esgotado!</div>
-    <div class="feedback-box explanation" id="explanation">
-      <div class="feedback-title">💡 Explicação</div>
-      <div id="explanation-text"></div>
-    </div>
-    <div class="next-wait" id="next-wait">⏳ Aguarda o admin para a próxima pergunta...</div>
+    <div class="status-bar" id="status-bar"></div>
   </div>
 </div>
 
@@ -175,250 +152,194 @@ const SUPABASE_URL = 'https://ijwgivgtpbonferzayju.supabase.co';
 const SUPABASE_KEY = 'sb_publishable_6dFS89RL1DywcIH9_9BUPA_GhhgmKKl';
 
 const QUESTIONS = [
-  { tag:'🔤 Código',        text:'Qual é a palavra escondida nesta sequência de números?', hint:'3  ·  1  ·  6  ·  5', context:null, options:['a) café','b) casa','c) copo'], correct:0, time:45, explanation:'Cada número é a posição da letra no alfabeto: 3=C, 1=A, 6=F, 5=E → CAFE → café ☕' },
-  { tag:'🔢 Sequências',    text:'Qual é o número que falta?', hint:'1  ·  2  ·  6  ·  24  ·  120  ·  ___', context:null, options:['a) 360','b) 720','c) 600'], correct:1, time:60, explanation:'É a sequência de fatoriais: 1!=1, 2!=2, 3!=6, 4!=24, 5!=120, 6!=720.' },
-  { tag:'⚙️ Engenharia',    text:'Uma bomba enche um tanque em 6h. Outra esvazia-o em 4h. Se ambas estiverem ligadas ao mesmo tempo, o que acontece?', hint:null, context:'Assume que o tanque começa cheio.', options:['a) Enche em 12h','b) Esvazia em 12h','c) Equilibram-se — nada acontece'], correct:1, time:60, explanation:'Taxa de enchimento: 1/6 /h. Esvaziamento: 1/4 /h. Como 1/4 > 1/6, esvazia. Taxa líquida: 1/4−1/6=1/12 /h → esvazia em 12h.' },
-  { tag:'🧊 Espacial',      text:'Quantas faces tem um cubo se lhe cortares exactamente um vértice (um canto)?', hint:null, context:null, options:['a) 6 faces','b) 7 faces','c) 8 faces'], correct:1, time:60, explanation:'O corte cria uma nova face triangular sem remover nenhuma das 6 existentes. Total: 7 faces.' },
-  { tag:'⚡ Física',        text:'Uma ponte aguenta 10 toneladas. Um camião de 9,9t para em cima dela e um pássaro pousa no capô. A ponte colapsa. Porquê?', hint:null, context:null, options:['a) O pássaro foi a gota de água','b) O travão gerou força dinâmica > 10t','c) A ponte já estava danificada'], correct:1, time:60, explanation:'Ao travar, o camião aplicou força dinâmica (F=m×a) muito superior à carga estática. Erro clássico: confundir carga estática com dinâmica.' },
-  { tag:'🧠 Lógica',        text:'Tens dois fios irregulares — cada um demora exactamente 1 hora a queimar. Sem relógio, como medes exactamente 45 minutos?', hint:null, context:'Os fios não queimam de forma uniforme, não podes medir pelo comprimento.', options:['a) Queimas metade de cada fio','b) Acendes o fio 1 dos dois extremos + fio 2 de uma ponta. Quando o fio 1 acabar, acendes o outro extremo do fio 2','c) É impossível sem relógio'], correct:1, time:60, explanation:'Fio 1 dos dois extremos → acaba em 30 min. Fio 2 tem 30 min restantes → acender outro extremo → mais 15 min. Total: 45 min ✅' },
-  { tag:'⚖️ Combinatória',  text:'Tens 12 bolas visualmente idênticas. Uma é diferente — pode ser mais pesada OU mais leve. Com uma balança de pratos (sem pesos), qual o mínimo de pesagens para identificar a bola E saber se é mais pesada ou mais leve?', hint:null, context:null, options:['a) 2 pesagens','b) 3 pesagens','c) 4 pesagens'], correct:1, time:60, explanation:'3 pesagens são suficientes. 1ª: 4 vs 4. Se equilibrar → a diferente está nas 4 restantes. As pesagens seguintes isolam a bola e determinam se é mais pesada ou leve.' },
-  { tag:'🦠 Contraintuitivo',text:'Uma bactéria duplica a cada minuto. Às 12:00 há 1 bactéria. Às 13:00 o frasco está completamente cheio. A que horas estava o frasco exactamente a metade?', hint:null, context:null, options:['a) 12:30','b) 12:59','c) 12:50'], correct:1, time:180, explanation:'Se às 13:00 está cheio e duplica a cada minuto, um minuto antes (12:59) estava a metade. Crescimento exponencial ≠ crescimento linear.' }
+  { tag:'🔤 Código',          text:'Qual é a palavra escondida nesta sequência de números?',                                                                                                         hint:'3  ·  1  ·  6  ·  5',              context:null,                                                                         options:['a) café','b) casa','c) copo'],                                                                                                                                                                                                  correct:0, time:45,  explanation:'Cada número é a posição da letra no alfabeto: 3=C, 1=A, 6=F, 5=E → CAFE → café ☕' },
+  { tag:'🔢 Sequências',      text:'Qual é o número que falta?',                                                                                                                                    hint:'1  ·  2  ·  6  ·  24  ·  120  ·  ___', context:null,                                                                      options:['a) 360','b) 720','c) 600'],                                                                                                                                                                                                     correct:1, time:60,  explanation:'É a sequência de fatoriais: 1!=1, 2!=2, 3!=6, 4!=24, 5!=120, 6!=720.' },
+  { tag:'⚙️ Engenharia',      text:'Uma bomba enche um tanque em 6h. Outra esvazia-o em 4h. Se ambas estiverem ligadas ao mesmo tempo, o que acontece?',                                            hint:null,                                context:'Assume que o tanque começa cheio.',                                           options:['a) Enche em 12h','b) Esvazia em 12h','c) Equilibram-se — nada acontece'],                                                                                                                                                       correct:1, time:60,  explanation:'Taxa de enchimento: 1/6 /h. Esvaziamento: 1/4 /h. Como 1/4 > 1/6, esvazia. Taxa líquida: 1/4−1/6=1/12 /h → esvazia em 12h.' },
+  { tag:'🧊 Espacial',        text:'Quantas faces tem um cubo se lhe cortares exactamente um vértice (um canto)?',                                                                                  hint:null,                                context:null,                                                                         options:['a) 6 faces','b) 7 faces','c) 8 faces'],                                                                                                                                                                                        correct:1, time:60,  explanation:'O corte cria uma nova face triangular sem remover nenhuma das 6 existentes. Total: 7 faces.' },
+  { tag:'⚡ Física',           text:'Uma ponte aguenta 10 toneladas. Um camião de 9,9t para em cima dela e um pássaro pousa no capô. A ponte colapsa. Porquê?',                                     hint:null,                                context:null,                                                                         options:['a) O pássaro foi a gota de água','b) O travão gerou força dinâmica > 10t','c) A ponte já estava danificada'],                                                                                                                    correct:1, time:60,  explanation:'Ao travar, o camião aplicou força dinâmica (F=m×a) muito superior à carga estática. Erro clássico: confundir carga estática com dinâmica.' },
+  { tag:'🧠 Lógica',          text:'Tens dois fios irregulares — cada um demora exactamente 1 hora a queimar. Sem relógio, como medes exactamente 45 minutos?',                                    hint:null,                                context:'Os fios não queimam de forma uniforme, não podes medir pelo comprimento.',   options:['a) Queimas metade de cada fio','b) Acendes o fio 1 dos dois extremos + fio 2 de uma ponta. Quando o fio 1 acabar, acendes o outro extremo do fio 2','c) É impossível sem relógio'],                                            correct:1, time:60,  explanation:'Fio 1 dos dois extremos → acaba em 30 min. Fio 2 tem 30 min restantes → acender outro extremo → mais 15 min. Total: 45 min ✅' },
+  { tag:'⚖️ Combinatória',    text:'Tens 12 bolas visualmente idênticas. Uma é diferente — pode ser mais pesada OU mais leve. Com uma balança de pratos (sem pesos), qual o mínimo de pesagens?', hint:null,                                context:null,                                                                         options:['a) 2 pesagens','b) 3 pesagens','c) 4 pesagens'],                                                                                                                                                                               correct:1, time:60,  explanation:'3 pesagens são suficientes. 1ª: 4 vs 4. Se equilibrar → diferente nas 4 restantes. As pesagens seguintes isolam a bola e determinam se é mais pesada ou leve.' },
+  { tag:'🦠 Contraintuitivo', text:'Uma bactéria duplica a cada minuto. Às 12:00 há 1 bactéria. Às 13:00 o frasco está completamente cheio. A que horas estava o frasco exactamente a metade?',  hint:null,                                context:null,                                                                         options:['a) 12:30','b) 12:59','c) 12:50'],                                                                                                                                                                                               correct:1, time:180, explanation:'Se às 13:00 está cheio e duplica a cada minuto, um minuto antes (12:59) estava a metade. Crescimento exponencial ≠ crescimento linear.' }
 ];
 
-// ── STATE ──
-let username     = '';
-let sessionCode  = '';
-let participantId = null;
-let currentQ     = -1;
-let answered     = false;
-let localAnswers = [];
-let timerInt     = null;
-let pollInt      = null;
-let timeLeft     = 0;
+let username='', sessionCode='', participantId=null, currentQ=-1;
+let selectedOpt=null, timeLocked=false, localAnswers=[];
+let timerInt=null, pollInt=null, timeLeft=0;
 
-// ── HELPERS ──
-async function sb(path, method='GET', body=null) {
-  const opts = { method, headers:{'Content-Type':'application/json','apikey':SUPABASE_KEY,'Authorization':`Bearer ${SUPABASE_KEY}`,'Prefer':method==='POST'?'return=representation':''} };
-  if (body) opts.body = JSON.stringify(body);
-  const r = await fetch(`${SUPABASE_URL}/rest/v1/${path}`, opts);
-  if (!r.ok) return null;
-  try { return await r.json(); } catch { return null; }
+async function sb(path,method='GET',body=null){
+  const opts={method,headers:{'Content-Type':'application/json','apikey':SUPABASE_KEY,'Authorization':`Bearer ${SUPABASE_KEY}`,'Prefer':method==='POST'?'return=representation':''}};
+  if(body) opts.body=JSON.stringify(body);
+  const r=await fetch(`${SUPABASE_URL}/rest/v1/${path}`,opts);
+  if(!r.ok) return null;
+  try{return await r.json()}catch{return null}
 }
+async function sbPatch(path,body){
+  await fetch(`${SUPABASE_URL}/rest/v1/${path}`,{method:'PATCH',headers:{'Content-Type':'application/json','apikey':SUPABASE_KEY,'Authorization':`Bearer ${SUPABASE_KEY}`,'Prefer':'return=minimal'},body:JSON.stringify(body)});
+}
+function showScreen(id){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));document.getElementById(id).classList.add('active');window.scrollTo(0,0);}
 
-async function sbPatch(path, body) {
-  const r = await fetch(`${SUPABASE_URL}/rest/v1/${path}`, {
-    method:'PATCH',
-    headers:{'Content-Type':'application/json','apikey':SUPABASE_KEY,'Authorization':`Bearer ${SUPABASE_KEY}`,'Prefer':'return=minimal'},
-    body:JSON.stringify(body)
-  });
-  return r.ok;
+// LANDING
+function checkInputs(){
+  const u=document.getElementById('username-input').value.trim();
+  const c=document.getElementById('code-input').value.trim();
+  document.getElementById('btn-join').disabled=u.length<2||c.length!==5;
 }
+document.getElementById('username-input').addEventListener('input',checkInputs);
+document.getElementById('code-input').addEventListener('input',function(){this.value=this.value.toUpperCase();checkInputs();});
+document.getElementById('code-input').addEventListener('keydown',e=>{if(e.key==='Enter')joinSession();});
 
-function showScreen(id) {
-  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
-  document.getElementById(id).classList.add('active');
-  window.scrollTo(0,0);
-}
-
-// ── LANDING ──
-function checkInputs() {
-  const u = document.getElementById('username-input').value.trim();
-  const c = document.getElementById('code-input').value.trim();
-  document.getElementById('btn-join').disabled = u.length < 2 || c.length !== 5;
-}
-document.getElementById('username-input').addEventListener('input', checkInputs);
-document.getElementById('code-input').addEventListener('input', function() {
-  this.value = this.value.toUpperCase();
-  checkInputs();
+// Check URL params for pre-filled code
+window.addEventListener('load',()=>{
+  const params=new URLSearchParams(window.location.search);
+  const code=params.get('code');
+  if(code){document.getElementById('code-input').value=code.toUpperCase();checkInputs();}
 });
-document.getElementById('code-input').addEventListener('keydown', e => { if(e.key==='Enter') joinSession(); });
 
-async function joinSession() {
-  username    = document.getElementById('username-input').value.trim();
-  sessionCode = document.getElementById('code-input').value.trim().toUpperCase();
-
-  // Verify session exists
-  const sessions = await sb(`sessions?code=eq.${sessionCode}&select=code,current_q,state`);
-  if (!sessions || sessions.length === 0) {
-    document.getElementById('join-error').classList.add('show');
-    return;
-  }
+async function joinSession(){
+  username=document.getElementById('username-input').value.trim();
+  sessionCode=document.getElementById('code-input').value.trim().toUpperCase();
+  const sessions=await sb(`sessions?code=eq.${sessionCode}&select=code,current_q,state`);
+  if(!sessions||sessions.length===0){document.getElementById('join-error').classList.add('show');return;}
   document.getElementById('join-error').classList.remove('show');
-
-  // Register participant
-  const existing = await sb(`participants?session_code=eq.${sessionCode}&username=eq.${encodeURIComponent(username)}&select=id,answers`);
-  if (existing && existing.length > 0) {
-    participantId  = existing[0].id;
-    localAnswers   = JSON.parse(existing[0].answers || '[]');
+  const existing=await sb(`participants?session_code=eq.${sessionCode}&username=eq.${encodeURIComponent(username)}&select=id,answers`);
+  if(existing&&existing.length>0){
+    participantId=existing[0].id;
+    localAnswers=JSON.parse(existing[0].answers||'[]');
   } else {
-    const res = await sb('participants', 'POST', { session_code:sessionCode, username, answers:'[]', score:0 });
-    if (!res || res.length === 0) { alert('Erro ao entrar na sessão.'); return; }
-    participantId = res[0].id;
-    localAnswers  = [];
+    const res=await sb('participants','POST',{session_code:sessionCode,username,answers:'[]',score:0,ready_count:0});
+    if(!res||res.length===0){alert('Erro ao entrar na sessão.');return;}
+    participantId=res[0].id;
+    localAnswers=[];
   }
-
-  document.getElementById('waiting-name').textContent = username;
-  document.getElementById('user-pill').textContent    = username;
+  document.getElementById('waiting-name').textContent=username;
+  document.getElementById('user-pill').textContent=username;
   showScreen('screen-waiting');
   startPollingSession(sessions[0]);
 }
 
-// ── SESSION POLLING ──
-function startPollingSession(initial) {
+function startPollingSession(initial){
   handleSessionState(initial);
   clearInterval(pollInt);
-  pollInt = setInterval(async () => {
-    const data = await sb(`sessions?code=eq.${sessionCode}&select=current_q,state`);
-    if (data && data.length > 0) handleSessionState(data[0]);
-  }, 2000);
+  pollInt=setInterval(async()=>{
+    const data=await sb(`sessions?code=eq.${sessionCode}&select=current_q,state`);
+    if(data&&data.length>0) handleSessionState(data[0]);
+  },2000);
 }
 
-function handleSessionState(session) {
-  if (session.state === 'finished') {
-    clearInterval(pollInt);
-    clearInterval(timerInt);
-    showResults();
-    return;
-  }
-  if (session.state === 'question' && session.current_q !== currentQ) {
-    currentQ = session.current_q;
-    answered = false;
+function handleSessionState(session){
+  if(session.state==='finished'){clearInterval(pollInt);clearInterval(timerInt);showResults();return;}
+  if(session.state==='question'&&session.current_q!==currentQ){
+    currentQ=session.current_q;
+    selectedOpt=null;
+    timeLocked=false;
     clearInterval(timerInt);
     showQuestion(currentQ);
   }
 }
 
-// ── QUESTION ──
-function showQuestion(qi) {
+function showQuestion(qi){
   showScreen('screen-quiz');
-  const q = QUESTIONS[qi];
-  document.getElementById('q-counter').textContent = `Pergunta ${qi+1} / ${QUESTIONS.length}`;
-  document.getElementById('q-tag').textContent     = q.tag;
-  document.getElementById('q-text').textContent    = q.text;
-
-  const hintEl = document.getElementById('q-hint');
-  if (q.hint) { hintEl.textContent = q.hint; hintEl.style.display = 'block'; } else hintEl.style.display = 'none';
-
-  const ctxEl = document.getElementById('q-context');
-  if (q.context) { ctxEl.textContent = q.context; ctxEl.style.display = 'block'; } else ctxEl.style.display = 'none';
-
-  const container = document.getElementById('options-container');
-  container.innerHTML = '';
-  const letters = ['A','B','C'];
-  q.options.forEach((opt,i) => {
-    const btn = document.createElement('button');
-    btn.className = 'option-btn';
-    btn.innerHTML = `<span class="letter">${letters[i]}</span><span>${opt}</span>`;
-    btn.onclick = () => selectOption(i);
+  const q=QUESTIONS[qi];
+  document.getElementById('q-counter').textContent=`Pergunta ${qi+1} / ${QUESTIONS.length}`;
+  document.getElementById('q-tag').textContent=q.tag;
+  document.getElementById('q-text').textContent=q.text;
+  const hintEl=document.getElementById('q-hint');
+  if(q.hint){hintEl.textContent=q.hint;hintEl.style.display='block';}else hintEl.style.display='none';
+  const ctxEl=document.getElementById('q-context');
+  if(q.context){ctxEl.textContent=q.context;ctxEl.style.display='block';}else ctxEl.style.display='none';
+  const container=document.getElementById('options-container');
+  container.innerHTML='';
+  ['A','B','C'].forEach((letter,i)=>{
+    const btn=document.createElement('button');
+    btn.className='option-btn';
+    btn.id=`opt-${i}`;
+    btn.innerHTML=`<span class="letter">${letter}</span><span>${q.options[i]}</span>`;
+    btn.onclick=()=>selectOption(i);
     container.appendChild(btn);
   });
-
-  document.getElementById('timeout-msg').classList.remove('show');
-  document.getElementById('explanation').classList.remove('show');
-  document.getElementById('next-wait').classList.remove('show');
-
+  setStatus('');
   startTimer(q.time);
 }
 
-function startTimer(seconds) {
+async function selectOption(idx){
+  if(timeLocked) return;
+  document.querySelectorAll('.option-btn').forEach(b=>b.classList.remove('selected'));
+  document.getElementById(`opt-${idx}`).classList.add('selected');
+  selectedOpt=idx;
+  while(localAnswers.length<=currentQ) localAnswers.push(null);
+  localAnswers[currentQ]=idx;
+  // Save tentative answer — score NOT updated yet
+  await sbPatch(`participants?id=eq.${participantId}`,{answers:JSON.stringify(localAnswers)});
+  setStatus('✓ Resposta guardada — podes mudar até o tempo acabar','saved');
+}
+
+function startTimer(seconds){
   clearInterval(timerInt);
-  timeLeft = seconds;
-  updateTimer(seconds, seconds);
-  timerInt = setInterval(() => {
+  timeLeft=seconds;
+  updateTimer(seconds,seconds);
+  timerInt=setInterval(()=>{
     timeLeft--;
-    updateTimer(timeLeft, seconds);
-    if (timeLeft <= 0) { clearInterval(timerInt); onTimeout(); }
-  }, 1000);
+    updateTimer(timeLeft,seconds);
+    if(timeLeft<=0){clearInterval(timerInt);lockAnswers();}
+  },1000);
 }
 
-function updateTimer(left, total) {
-  const pct = (left/total)*100;
-  const bar = document.getElementById('timer-bar');
-  const lbl = document.getElementById('timer-label');
-  bar.style.width = pct+'%';
-  const mins = Math.floor(left/60), secs = left%60;
-  lbl.textContent = mins>0 ? `${mins}:${String(secs).padStart(2,'0')}` : `${left}s`;
-  bar.className = 'timer-bar'+(pct<=20?' danger':pct<=40?' warning':'');
-  lbl.className = 'timer-label'+(pct<=20?' danger':pct<=40?' warning':'');
+function updateTimer(left,total){
+  const pct=(left/total)*100;
+  const bar=document.getElementById('timer-bar');
+  const lbl=document.getElementById('timer-label');
+  bar.style.width=pct+'%';
+  const mins=Math.floor(left/60),secs=left%60;
+  lbl.textContent=mins>0?`${mins}:${String(secs).padStart(2,'0')}`:`${left}s`;
+  bar.className='timer-bar'+(pct<=20?' danger':pct<=40?' warning':'');
+  lbl.className='timer-label'+(pct<=20?' danger':pct<=40?' warning':'');
 }
 
-async function selectOption(idx) {
-  if (answered) return;
-  answered = true;
-  clearInterval(timerInt);
-
-  const q = QUESTIONS[currentQ];
-  const isCorrect = idx === q.correct;
-
-  document.querySelectorAll('.option-btn').forEach((btn,i) => {
-    btn.disabled = true;
-    if (i===idx) btn.classList.add(isCorrect?'correct':'wrong');
-    if (!isCorrect && i===q.correct) btn.classList.add('reveal');
+async function lockAnswers(){
+  timeLocked=true;
+  const q=QUESTIONS[currentQ];
+  document.querySelectorAll('.option-btn').forEach((btn,i)=>{
+    btn.classList.add('locked');
+    btn.classList.remove('selected');
+    if(selectedOpt!==null&&i===selectedOpt) btn.classList.add(selectedOpt===q.correct?'correct':'wrong');
   });
-
-  // Save answer
-  while (localAnswers.length < currentQ) localAnswers.push(null);
-  localAnswers[currentQ] = idx;
-  const newScore = localAnswers.filter((a,i) => a === QUESTIONS[i]?.correct).length;
-
-  await sbPatch(`participants?id=eq.${participantId}`, {
-    answers: JSON.stringify(localAnswers),
-    score: newScore
-  });
-
-  document.getElementById('explanation-text').textContent = q.explanation;
-  document.getElementById('explanation').classList.add('show');
-  document.getElementById('next-wait').classList.add('show');
+  while(localAnswers.length<=currentQ) localAnswers.push(null);
+  if(selectedOpt===null) localAnswers[currentQ]=null;
+  const newScore=localAnswers.filter((a,i)=>a!==null&&a===QUESTIONS[i]?.correct).length;
+  await sbPatch(`participants?id=eq.${participantId}`,{answers:JSON.stringify(localAnswers),score:newScore});
+  if(selectedOpt===null) setStatus('⏰ Tempo esgotado! Não respondeste a esta pergunta.','timeout');
+  else if(selectedOpt===q.correct) setStatus('✅ Correcto! Aguarda a próxima pergunta...','correct-end');
+  else setStatus('❌ Resposta errada. Aguarda a próxima pergunta...','wrong-end');
 }
 
-async function onTimeout() {
-  if (answered) return;
-  answered = true;
-
-  const q = QUESTIONS[currentQ];
-  document.querySelectorAll('.option-btn').forEach((btn,i) => {
-    btn.disabled = true;
-    if (i===q.correct) btn.classList.add('reveal');
-  });
-
-  while (localAnswers.length < currentQ) localAnswers.push(null);
-  localAnswers[currentQ] = null;
-
-  await sbPatch(`participants?id=eq.${participantId}`, { answers: JSON.stringify(localAnswers) });
-
-  document.getElementById('timeout-msg').classList.add('show');
-  document.getElementById('explanation-text').textContent = q.explanation;
-  document.getElementById('explanation').classList.add('show');
-  document.getElementById('next-wait').classList.add('show');
+function setStatus(msg,type=''){
+  const el=document.getElementById('status-bar');
+  if(!msg){el.classList.remove('show','saved','timeout','correct-end','wrong-end','waiting');return;}
+  el.textContent=msg;
+  el.className='status-bar show'+(type?` ${type}`:'');
 }
 
-// ── RESULTS ──
-function showResults() {
-  clearInterval(pollInt);
-  clearInterval(timerInt);
-
-  const correct = localAnswers.filter((a,i) => a === QUESTIONS[i]?.correct).length;
-  const total   = QUESTIONS.length;
-  const emoji   = correct>=7?'🧠':correct>=5?'💪':correct>=3?'😅':'💀';
-
-  document.getElementById('result-emoji').textContent = emoji;
-  document.getElementById('result-name').textContent  = username;
-  document.getElementById('result-score').textContent = `${correct}/${total}`;
-
-  const bd = document.getElementById('result-breakdown');
-  bd.innerHTML = '';
-  localAnswers.forEach((a,i) => {
-    const q = QUESTIONS[i];
-    const row = document.createElement('div');
-    row.className = 'breakdown-row';
-    let cls, txt;
-    if (a===null||a===undefined) { cls='badge-timeout'; txt='⏰ Tempo'; }
-    else if (a===q.correct)      { cls='badge-correct'; txt='✓ Certo'; }
-    else                         { cls='badge-wrong';   txt='✗ Errado'; }
-    row.innerHTML = `<span class="breakdown-q">${i+1}. ${q.tag}</span><span class="breakdown-badge ${cls}">${txt}</span>`;
+function showResults(){
+  clearInterval(pollInt);clearInterval(timerInt);
+  const correct=localAnswers.filter((a,i)=>a!==null&&a===QUESTIONS[i]?.correct).length;
+  const total=QUESTIONS.length;
+  const emoji=correct>=7?'🧠':correct>=5?'💪':correct>=3?'😅':'💀';
+  document.getElementById('result-emoji').textContent=emoji;
+  document.getElementById('result-name').textContent=username;
+  document.getElementById('result-score').textContent=`${correct}/${total}`;
+  const bd=document.getElementById('result-breakdown');
+  bd.innerHTML='';
+  localAnswers.forEach((a,i)=>{
+    const q=QUESTIONS[i];if(!q)return;
+    const row=document.createElement('div');
+    row.className='breakdown-row';
+    let cls,txt;
+    if(a===null||a===undefined){cls='badge-timeout';txt='⏰ Sem resposta';}
+    else if(a===q.correct){cls='badge-correct';txt='✓ Certo';}
+    else{cls='badge-wrong';txt='✗ Errado';}
+    row.innerHTML=`<span class="breakdown-q">${i+1}. ${q.tag}</span><span class="breakdown-badge ${cls}">${txt}</span>`;
     bd.appendChild(row);
   });
-
   showScreen('screen-results');
 }
 </script>
