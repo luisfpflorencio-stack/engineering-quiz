@@ -244,9 +244,10 @@ function handleSessionState(session){
   if(session.state==='finished'){clearInterval(pollInt);clearInterval(timerInt);showResults();return;}
   // New question
   if(session.state==='question'&&session.current_q!==currentQ){
-    currentQ=session.current_q;
+    // Reset state BEFORE rendering
     selectedOpt=null;
     timeLocked=false;
+    currentQ=session.current_q;
     clearInterval(timerInt);
     showQuestion(currentQ);
   }
@@ -299,7 +300,13 @@ async function selectOption(idx){
   selectedOpt=idx;
   while(localAnswers.length<=currentQ) localAnswers.push(null);
   localAnswers[currentQ]=idx;
-  await sbPatch(`participants?id=eq.${participantId}`,{answers:JSON.stringify(localAnswers)});
+  // Save score immediately so admin leaderboard updates in real time
+  const liveScore=localAnswers.reduce((s,a,i)=>{
+    if(a===null||a===undefined) return s;
+    if(a===QUESTIONS[i]?.correct) return s+(QUESTIONS[i].bonus?2:1);
+    return s;
+  },0);
+  await sbPatch(`participants?id=eq.${participantId}`,{answers:JSON.stringify(localAnswers),score:liveScore});
   setStatus('✓ Resposta guardada — podes mudar até o tempo acabar','saved');
 }
 
