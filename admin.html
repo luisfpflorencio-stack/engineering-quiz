@@ -260,9 +260,10 @@
             <div class="mini-bar-bg"><div class="mini-bar ready" id="ready-bar" style="width:0%"></div></div>
           </div>
 
-          <!-- Next button — always available -->
-          <div class="card">
-            <button class="btn btn-primary btn-full" id="btn-next-q" onclick="nextQuestion()" style="font-size:15px;padding:14px">Próxima Pergunta →</button>
+          <!-- Lock + Next -->
+          <div class="card" style="display:flex;flex-direction:column;gap:8px">
+            <button class="btn btn-full" id="btn-lock" onclick="lockQuestion()" style="font-size:15px;padding:14px;background:var(--gold);color:#fff;border:none;border-radius:10px;font-family:'Inter',sans-serif;font-weight:700;cursor:pointer;">🔒 Bloquear Respostas</button>
+            <button class="btn btn-primary btn-full" id="btn-next-q" onclick="nextQuestion()" disabled style="font-size:15px;padding:14px">Próxima Pergunta →</button>
           </div>
 
         </div>
@@ -434,6 +435,11 @@ function showQuestion(qi){
   document.getElementById('ready-total').textContent=`/ ${totalParticipants}`;
   document.getElementById('ready-bar').style.width='0%';
   document.getElementById('admin-lb').innerHTML='<div class="lb-loading">A aguardar respostas...</div>';
+  // Reset buttons
+  const lockBtn=document.getElementById('btn-lock');
+  lockBtn.disabled=false;
+  lockBtn.textContent='🔒 Bloquear Respostas';
+  document.getElementById('btn-next-q').disabled=true;
 
   startAdminTimer(q.time);
   startPollingAnswers(qi);
@@ -444,16 +450,10 @@ function startAdminTimer(seconds){
   clearInterval(timerInt);
   timeLeft=seconds;
   updateAdminTimer(seconds,seconds);
-  timerInt=setInterval(async()=>{
+  timerInt=setInterval(()=>{
     timeLeft--;
     updateAdminTimer(timeLeft,seconds);
-    if(timeLeft<=0){
-      clearInterval(timerInt);
-      // Signal participants time is up
-      await sbPatch(`sessions?code=eq.${sessionCode}`,{time_expired:true});
-      // 10s lag before revealing answer to admin
-      startLagCountdown();
-    }
+    if(timeLeft<=0){ clearInterval(timerInt); lockQuestion(); }
   },1000);
 }
 
@@ -466,6 +466,15 @@ function updateAdminTimer(left,total){
   bar.style.width=pct+'%';
   el.className='timer-big'+(pct<=20?' danger':pct<=40?' warning':'');
   bar.className='timer-bar'+(pct<=20?' danger':pct<=40?' warning':'');
+}
+
+// LOCK — blocks participants, then reveals answer after 10s
+async function lockQuestion(){
+  clearInterval(timerInt);
+  const lockBtn=document.getElementById('btn-lock');
+  if(lockBtn){ lockBtn.disabled=true; lockBtn.textContent='🔒 Bloqueado'; }
+  await sbPatch(`sessions?code=eq.${sessionCode}`,{time_expired:true});
+  startLagCountdown();
 }
 
 // 10 SECOND LAG before revealing answer
@@ -492,6 +501,7 @@ function revealAnswer(){
   document.getElementById(`opt-row-${q.correct}`).classList.add('reveal-correct');
   document.getElementById('explanation-text').textContent=q.explanation;
   document.getElementById('explanation-box').classList.add('show');
+  document.getElementById('btn-next-q').disabled=false;
 }
 
 // POLL ANSWERS

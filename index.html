@@ -300,14 +300,9 @@ async function selectOption(idx){
   selectedOpt=idx;
   while(localAnswers.length<=currentQ) localAnswers.push(null);
   localAnswers[currentQ]=idx;
-  // Save score immediately so admin leaderboard updates in real time
-  const liveScore=localAnswers.reduce((s,a,i)=>{
-    if(a===null||a===undefined) return s;
-    if(a===QUESTIONS[i]?.correct) return s+(QUESTIONS[i].bonus?2:1);
-    return s;
-  },0);
-  await sbPatch(`participants?id=eq.${participantId}`,{answers:JSON.stringify(localAnswers),score:liveScore});
-  setStatus('✓ Resposta guardada — podes mudar até o tempo acabar','saved');
+  // Save tentative answer only — score updated on lock
+  await sbPatch(`participants?id=eq.${participantId}`,{answers:JSON.stringify(localAnswers)});
+  setStatus('✓ Resposta guardada — podes mudar até bloquear','saved');
 }
 
 // Display-only timer — actual lock comes from admin signal
